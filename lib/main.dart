@@ -50,7 +50,7 @@ class _LandingPageMainState extends State<LandingPageMain> {
               },
             ),
             RaisedButton(
-              child: Text("Open Join/Host screen"),
+              child: Text("After pressing host"),
               onPressed: () {
                 Navigator.push(
     context,
