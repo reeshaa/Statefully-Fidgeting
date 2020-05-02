@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:statefully_fidgeting/components/hostgamepopup.dart';
 import 'package:statefully_fidgeting/components/joingamebutton.dart';
+import 'package:slimy_card/slimy_card.dart';
 
 class JoinHostChoice extends StatefulWidget {
   JoinHostChoice({Key key}) : super(key: key);
@@ -13,8 +14,7 @@ class _JoinHostChoiceState extends State<JoinHostChoice> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:
-          CustomScrollView(physics: BouncingScrollPhysics(), slivers: <Widget>[
+      body: CustomScrollView(slivers: <Widget>[
         SliverAppBar(
           expandedHeight: 70,
           backgroundColor: Colors.black,
@@ -22,7 +22,6 @@ class _JoinHostChoiceState extends State<JoinHostChoice> {
           pinned: true,
           flexibleSpace: FlexibleSpaceBar(
             centerTitle: true,
-            background: Image.asset('image/war.jpg'),
             title: Text(
               "TUG OF WAR!",
             ),
@@ -31,16 +30,32 @@ class _JoinHostChoiceState extends State<JoinHostChoice> {
         SliverFillRemaining(
           hasScrollBody: true,
           child: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topRight,
-                  end: Alignment.bottomLeft,
-                  colors: [Colors.pink, Colors.yellow]),
-            ),
+            // decoration: BoxDecoration(
+            //   gradient: LinearGradient(
+            //       begin: Alignment.topRight,
+            //       end: Alignment.bottomLeft,
+            //       colors: [Colors.white10, Colors.white]),
+            // ),
             child: Container(
               padding: EdgeInsets.all(20),
               child: Column(
                 children: <Widget>[
+                  Text(
+                    "Let's Play!",
+                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 28),
+                  ),
+                  SizedBox(height: 20),
+                  SlimyCard(
+                    color: Colors.lightGreenAccent[700],
+                    width: 200,
+                    topCardHeight: 150,
+                    bottomCardHeight: 150,
+                    borderRadius: 15,
+                    topCardWidget: HostGamePopup(),
+                    bottomCardWidget: JoinGamePopup(),
+                    slimeEnabled: true,
+                  ),
+                  SizedBox(height: 40),
                   Text(
                     "Game Description:",
                     textAlign: TextAlign.left,
@@ -52,40 +67,6 @@ class _JoinHostChoiceState extends State<JoinHostChoice> {
                     textAlign: TextAlign.justify,
                     style: TextStyle(
                       fontSize: 22,
-                    ),
-                  ),
-                  Center(
-                    child: Container(
-                      height: 300,
-                      padding: EdgeInsets.all(20),
-                      child: Card(
-                        elevation: 5,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25.0),
-                        ),
-                        child: Container(
-                          padding: EdgeInsets.all(20),
-                          child: Column(
-                            children: <Widget>[
-                              Text(
-                                "Let's Play!",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w700, fontSize: 28),
-                              ),
-                              SizedBox(height: 25),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  HostGamePopup(),
-                                  SizedBox(height: 20),
-                                  JoinGamePopup(),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
                     ),
                   ),
                 ],

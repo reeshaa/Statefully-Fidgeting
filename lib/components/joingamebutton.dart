@@ -14,8 +14,6 @@ class JoinGamePopup extends StatefulWidget {
 }
 
 class _JoinGamePopupState extends State<JoinGamePopup> {
- 
-
   Future<void> joinRoom(String _uid, String _password, String _name) async {
     final response = await http.get(
         'https://game-backend.glitch.me/joinRoom/${_uid}/${_password}/${_name}');
@@ -23,10 +21,8 @@ class _JoinGamePopupState extends State<JoinGamePopup> {
     if (response.statusCode == 200) {
       print('Joined');
       Navigator.pop(context);
-      Navigator.push(
-                    context,
-                    new MaterialPageRoute(
-                        builder: (context) => GamePlay_TugOfWar()));
+      Navigator.push(context,
+          new MaterialPageRoute(builder: (context) => GamePlay_TugOfWar()));
 
       return 200;
     } else if (response.statusCode == 201) {
@@ -51,7 +47,7 @@ class _JoinGamePopupState extends State<JoinGamePopup> {
                 borderRadius: BorderRadius.circular(10.0)),
             title: Text('Enter Room ID and password'),
             content: Form(
-              key:_formKey,
+              key: _formKey,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
@@ -81,8 +77,8 @@ class _JoinGamePopupState extends State<JoinGamePopup> {
                     validator: (value) {
                       if (value.isEmpty) {
                         return 'Please enter the room ID';
-                      } 
-                      
+                      }
+
                       return null;
                     },
                   ),
@@ -129,7 +125,6 @@ class _JoinGamePopupState extends State<JoinGamePopup> {
                       ? "id"
                       : _nameController.text.trim();
                   if (_formKey.currentState.validate()) {
-                    
                     joinRoom(gameID, password, name);
                   }
 
@@ -144,35 +139,32 @@ class _JoinGamePopupState extends State<JoinGamePopup> {
   @override
   Widget build(BuildContext context) {
     return Card(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(25.0),
-                                    ),
-                                    color: Colors.pinkAccent,
-                                    child: InkWell(
-                                      highlightColor: Colors.green,
-                                      splashColor: Colors.blue,
-                                      borderRadius: BorderRadius.circular(25),
-                                      onTap: () {
-                                        _displayJoinDialog(context);
-                                      },
-                                      child: Container(
-                                        padding: EdgeInsets.all(10),
-                                        height: 50,
-                                        child: Center(
-                                          child: Text(
-                                            "JOIN EXISTING GAME",
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: 20,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  );
-    
-    
-    
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(25.0),
+      ),
+      color: Colors.black,
+      child: InkWell(
+        highlightColor: Colors.green,
+        splashColor: Colors.black,
+        borderRadius: BorderRadius.circular(25),
+        onTap: () {
+          _displayJoinDialog(context);
+        },
+        child: Container(
+          padding: EdgeInsets.all(10),
+          height: 60,
+          child: Center(
+            child: Text(
+              "JOIN EXISTING GAME",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+                fontSize: 18,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

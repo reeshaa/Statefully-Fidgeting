@@ -32,27 +32,27 @@ class _LandingPageMainState extends State<LandingPageMain> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
-              colors: [Colors.pink, Colors.yellow]),
-        ),
+        // decoration: BoxDecoration(
+        //   gradient: LinearGradient(
+        //       begin: Alignment.topRight,
+        //       end: Alignment.bottomLeft,
+        //       colors: [Colors.pink, Colors.yellow]),
+        // ),
         width: double.infinity,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             Text(
-                    "Statefully Fidgeting",
-                    textAlign: TextAlign.left,
-                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
-                  ),
-                  SizedBox(height: 20),
+              "Statefully Fidgeting",
+              textAlign: TextAlign.left,
+              style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
+            ),
+            SizedBox(height: 20),
             Card(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(25.0),
               ),
-              color: Colors.pinkAccent,
+              color: Colors.lightGreenAccent[700],
               child: InkWell(
                 highlightColor: Colors.green,
                 splashColor: Colors.blue,
