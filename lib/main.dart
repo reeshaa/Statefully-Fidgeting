@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
+import 'package:statefully_fidgeting/screens/joinhost.dart';
+=======
 import 'package:flutter/services.dart';
 import 'package:statefully_fidgeting/components/hostgamepopup.dart';
 import 'screens/gameplay_tugofwar.dart';
+>>>>>>> 0a1d37c35919146f3829a09e198c22d150f82069
 
 void main() => runApp(MyApp());
 
@@ -46,7 +50,10 @@ class _LandingPageMainState extends State<LandingPageMain> {
             RaisedButton(
               child: Text("Open Join/Host screen"),
               onPressed: () {
-                //add navigator here
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => JoinHostChoice()));
               },
             ),
             RaisedButton(
