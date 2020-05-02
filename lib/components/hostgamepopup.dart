@@ -141,10 +141,11 @@ class _HostGamePopupState extends State<HostGamePopup> {
           child: Center(
             child: Text(
               "HOST A NEW GAME",
+              textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w700,
-                fontSize: 18,
+                fontSize: 17,
               ),
             ),
           ),

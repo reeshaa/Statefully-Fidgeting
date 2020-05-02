@@ -79,6 +79,41 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar> {
           ),
         ),
       ),
+      bottomSheet: BottomModal(),
     );
+  }
+}
+
+class BottomModal extends StatefulWidget {
+  @override
+  _BottomModalState createState() => _BottomModalState();
+}
+
+class _BottomModalState extends State<BottomModal> {
+  void _showModalSheet() {
+    showModalBottomSheet(
+        context: context,
+        builder: (builder) {
+          return Container(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: RaisedButton.icon(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                  onPressed: () {},
+                  icon: Icon(Icons.group_add),
+                  label: Text("Invite Players")),
+            ),
+            padding: EdgeInsets.all(40.0),
+          );
+        });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return RaisedButton.icon(
+        onPressed: _showModalSheet,
+        icon: Icon(Icons.more_vert),
+        label: Text("More options"));
   }
 }
