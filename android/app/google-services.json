@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "929372333813",
+    "firebase_url": "https://udemytutorial-af44b.firebaseio.com",
+    "project_id": "udemytutorial-af44b",
+    "storage_bucket": "udemytutorial-af44b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:929372333813:android:fc5f7d1746c8ceb3dc07bc",
+        "android_client_info": {
+          "package_name": "com.minihack.game"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "929372333813-06depru4f58rafivtdc4fd23560icq90.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.minihack.game",
+            "certificate_hash": "ed7abdf541ac29cf828896dab089ad4dc1e9c23d"
+          }
+        },
+        {
+          "client_id": "929372333813-f2r7g9v69and3sqbpanri982f3dtai5j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBgEf4wtWlWPaZQ63E-HzjovBV_v3gkXPs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "929372333813-f2r7g9v69and3sqbpanri982f3dtai5j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

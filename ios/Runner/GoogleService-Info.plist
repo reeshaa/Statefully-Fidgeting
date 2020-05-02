@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>929372333813-fdr8h85jf2b4d7gd5bov8pj6rho9c1vo.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.929372333813-fdr8h85jf2b4d7gd5bov8pj6rho9c1vo</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>929372333813-06depru4f58rafivtdc4fd23560icq90.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyC2U9EPhnO_BrIi0bsz-ttMk7UTxwMbhjs</string>
+	<key>GCM_SENDER_ID</key>
+	<string>929372333813</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.minihack.game</string>
+	<key>PROJECT_ID</key>
+	<string>udemytutorial-af44b</string>
+	<key>STORAGE_BUCKET</key>
+	<string>udemytutorial-af44b.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:929372333813:ios:0b2c166bed4da0d0dc07bc</string>
+	<key>DATABASE_URL</key>
+	<string>https://udemytutorial-af44b.firebaseio.com</string>
+</dict>
+</plist>
