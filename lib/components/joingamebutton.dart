@@ -129,9 +129,7 @@ class _JoinGamePopupState extends State<JoinGamePopup> {
                       ? "id"
                       : _nameController.text.trim();
                   if (_formKey.currentState.validate()) {
-                    // If the form is valid, display a Snackbar.
-                    Scaffold.of(context).showSnackBar(
-                        SnackBar(content: Text('Verifying details')));
+                    
                     joinRoom(gameID, password, name);
                   }
 
