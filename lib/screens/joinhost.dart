@@ -19,7 +19,6 @@ class _JoinHostChoiceState extends State<JoinHostChoice> {
           pinned: true,
           flexibleSpace: FlexibleSpaceBar(
             centerTitle: true,
-            background: Image.asset('image/war.jpg'),
             title: Text(
               "TUG OF WAR!",
             ),
