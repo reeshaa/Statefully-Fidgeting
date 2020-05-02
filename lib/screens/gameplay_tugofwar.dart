@@ -15,7 +15,7 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar> {
           gradient: LinearGradient(
               begin: Alignment.topRight,
               end: Alignment.bottomLeft,
-              colors: [Colors.pink, Colors.yellow]),
+              colors: [Colors.green, Colors.yellow]),
         ),
         child: Padding(
           padding: EdgeInsets.all(20),
