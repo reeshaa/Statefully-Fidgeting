@@ -156,6 +156,7 @@ class _JoinGamePopupState extends State<JoinGamePopup> {
           child: Center(
             child: Text(
               "JOIN EXISTING GAME",
+              textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w700,
