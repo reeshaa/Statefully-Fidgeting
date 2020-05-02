@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:statefully_fidgeting/screens/joinhost.dart';
 
 void main() => runApp(MyApp());
 
@@ -40,7 +41,10 @@ class _LandingPageMainState extends State<LandingPageMain> {
             RaisedButton(
               child: Text("Open Join/Host screen"),
               onPressed: () {
-                //add navigator here
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => JoinHostChoice()));
               },
             )
           ],
