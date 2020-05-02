@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'screens/gameplay_tugofwar.dart';
 
 void main() => runApp(MyApp());
 
@@ -34,7 +35,10 @@ class _LandingPageMainState extends State<LandingPageMain> {
             RaisedButton(
               child: Text("Open Game screen"),
               onPressed: () {
-                //add navigator here
+                Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (context) => GamePlay_TugOfWar()));
               },
             ),
             RaisedButton(
