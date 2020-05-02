@@ -113,9 +113,7 @@ class _HostGamePopupState extends State<HostGamePopup> {
                       ? "id"
                       : _nameController.text.trim();
                   if (_formKey.currentState.validate()) {
-                    // If the form is valid, display a Snackbar.
-                    Scaffold.of(context)
-                        .showSnackBar(SnackBar(content: Text('Creating Room')));
+                   
                     createRoom(gameID, password, name);
                   }
 
