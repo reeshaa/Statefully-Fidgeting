@@ -1,0 +1,12 @@
+Google Sheets :
+
+HTML : https://docs.google.com/spreadsheets/d/e/2PACX-1vQof3ocJkEzm6AALT0Y7McLxWBwsI8P_NQstGk_lgvKyC4NhlipNYNDtVY-9RjSQOcZD9h62w8QpI65/pubhtml
+Editing Public Link : https://docs.google.com/spreadsheets/d/1hSm6SrEmMrCDn-v0_M4SOByogmDNj_F34KU7y1WeV6Y/edit?usp=sharing
+JSON Endpoint Template: https://spreadsheets.google.com/feeds/cells/YOURGOOGLESHEETCODE/SHEETPAGENUMBER/public/full?alt=json
+JSON Endpoint : https://spreadsheets.google.com/feeds/cells/1hSm6SrEmMrCDn-v0_M4SOByogmDNj_F34KU7y1WeV6Y/1/public/full?alt=json
+
+Glitch Backend :
+https://game-backend.glitch.me/
+
+Github :
+https://github.com/psk907/Statefully-Fidgeting

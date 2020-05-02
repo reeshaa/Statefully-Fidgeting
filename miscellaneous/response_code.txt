@@ -1,0 +1,7 @@
+List of Server Responses
+
+200 - success
+400 - fail
+201 - wrong password
+401 - no password received
+300 - gameid doesnt exist
