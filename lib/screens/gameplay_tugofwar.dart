@@ -6,24 +6,24 @@ import 'package:http/http.dart' as http;
 import 'dart:ffi';
 
 class GamePlay_TugOfWar extends StatefulWidget {
-  String gameId;
-  GamePlay_TugOfWar({this.gameId});
+  String gameId;bool isAdmin;
+  GamePlay_TugOfWar({this.gameId,this.isAdmin});
   @override
   _GamePlay_TugOfWarState createState() => _GamePlay_TugOfWarState();
 }
 
 class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar> {
-  String question='';
-  
+  String question = '';
+
   Future<void> questionGetter() async {
-    final response = await http.get(
-        'https://game-backend.glitch.me/TOG/GiveQuestion');
+    final response =
+        await http.get('https://game-backend.glitch.me/TOG/GiveQuestion');
 
     if (response.statusCode == 200) {
       print('Joined');
       print(response.body);
       setState(() {
-       question=response.body; 
+        question = response.body;
       });
       return 200;
     } else if (response.statusCode == 201) {
@@ -41,13 +41,12 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar> {
     questionGetter();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
-   
     return Scaffold(
-      floatingActionButton: FloatingActionButton(onPressed: ()=>questionGetter(),),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => questionGetter(),
+      ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -102,8 +101,7 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar> {
                           width: 400,
                           padding: EdgeInsets.fromLTRB(8, 10, 8, 10),
                           //color: Colors.red[400],
-                          child:
-                              Center(child: Text('${question}')),
+                          child: Center(child: Text('${question}')),
                         ),
                         SizedBox(
                           height: 10,
@@ -123,6 +121,8 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar> {
 }
 
 class BottomModal extends StatefulWidget {
+  String gameId;bool isAdmin;
+  BottomModal({this.gameId,this.isAdmin});
   @override
   _BottomModalState createState() => _BottomModalState();
 }
@@ -137,7 +137,7 @@ class _BottomModalState extends State<BottomModal> {
               padding: const EdgeInsets.all(8.0),
               child: RaisedButton.icon(
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
+                      borderRadius: BorderRadius.circular(15)),
                   onPressed: () {},
                   icon: Icon(Icons.group_add),
                   label: Text("Invite Players")),
@@ -149,9 +149,15 @@ class _BottomModalState extends State<BottomModal> {
 
   @override
   Widget build(BuildContext context) {
-    return RaisedButton.icon(
-        onPressed: _showModalSheet,
-        icon: Icon(Icons.more_vert),
-        label: Text("More options"));
+    return Container(
+        width: double.infinity,
+        child: Row(children: <Widget>[
+          RaisedButton.icon(
+              onPressed: _showModalSheet,
+              icon: Icon(
+                Icons.more_vert,
+              ),
+              label: Text("More options")),
+        ]));
   }
 }
