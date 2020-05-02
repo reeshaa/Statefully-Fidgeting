@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+//import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class GamePlay_TugOfWar extends StatefulWidget {
   @override
@@ -65,6 +66,9 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar> {
                           //color: Colors.red[400],
                           child:
                               Center(child: Text('The question appears here')),
+                        ),
+                        SizedBox(
+                          height: 10,
                         ),
                       ],
                     ),
