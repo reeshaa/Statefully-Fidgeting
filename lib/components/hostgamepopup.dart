@@ -23,10 +23,8 @@ class _HostGamePopupState extends State<HostGamePopup> {
       print('Room created');
 
       Navigator.pop(context);
-      Navigator.push(
-                    context,
-                    new MaterialPageRoute(
-                        builder: (context) => GamePlay_TugOfWar()));
+      Navigator.push(context,
+          new MaterialPageRoute(builder: (context) => GamePlay_TugOfWar()));
       return 200;
     } else if (response.statusCode == 400) {
       return 400;
@@ -34,7 +32,6 @@ class _HostGamePopupState extends State<HostGamePopup> {
       throw Exception('Failed create room');
     }
   }
-
 
   _displayCreateDialog(BuildContext context) async {
     final String gameID = uuid.v4();
@@ -55,7 +52,7 @@ class _HostGamePopupState extends State<HostGamePopup> {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   //Text("Game ID : $gameID"),
-                 
+
                   TextFormField(
                     keyboardType: TextInputType.visiblePassword,
                     controller: _nameController,
@@ -113,7 +110,6 @@ class _HostGamePopupState extends State<HostGamePopup> {
                       ? "id"
                       : _nameController.text.trim();
                   if (_formKey.currentState.validate()) {
-                   
                     createRoom(gameID, password, name);
                   }
 
@@ -125,44 +121,35 @@ class _HostGamePopupState extends State<HostGamePopup> {
         });
   }
 
-
   @override
   Widget build(BuildContext context) {
-    return 
-    
-     Card(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(25.0),
-                                    ),
-                                    color: Colors.pinkAccent,
-                                    child: InkWell(
-                                      highlightColor: Colors.green,
-                                      splashColor: Colors.blue,
-                                      borderRadius: BorderRadius.circular(25),
-                                      onTap: () {
-                                         _displayCreateDialog(context);
-                                      },
-                                      child: Container(
-                                        padding: EdgeInsets.all(10),
-                                        height: 50,
-                                        child: Center(
-                                          child: Text(
-                                            "HOST A NEW GAME",
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: 20,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  );
-    
-    
-    
-    
-    
-   
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(25.0),
+      ),
+      color: Colors.black,
+      child: InkWell(
+        highlightColor: Colors.green,
+        splashColor: Colors.blue,
+        borderRadius: BorderRadius.circular(25),
+        onTap: () {
+          _displayCreateDialog(context);
+        },
+        child: Container(
+          padding: EdgeInsets.all(10),
+          height: 50,
+          child: Center(
+            child: Text(
+              "HOST A NEW GAME",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+                fontSize: 18,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
