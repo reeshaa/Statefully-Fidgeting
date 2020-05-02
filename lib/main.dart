@@ -57,9 +57,9 @@ class _LandingPageMainState extends State<LandingPageMain> {
               child: Text("After pressing host"),
               onPressed: () {
                 Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => HostGamePopup()),
-  );
+                  context,
+                  MaterialPageRoute(builder: (context) => HostGamePopup()),
+                );
               },
             )
           ],
