@@ -6,38 +6,39 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:ffi';
 
-class HostGamePopup extends StatefulWidget {
-  HostGamePopup({Key key}) : super(key: key);
+class JoinGamePopup extends StatefulWidget {
+  JoinGamePopup({Key key}) : super(key: key);
 
   @override
-  _HostGamePopupState createState() => _HostGamePopupState();
+  _JoinGamePopupState createState() => _JoinGamePopupState();
 }
 
-class _HostGamePopupState extends State<HostGamePopup> {
-  var uuid = Uuid();
-  Future<int> createRoom(String _uid, String _password, String _name) async {
+class _JoinGamePopupState extends State<JoinGamePopup> {
+ 
+
+  Future<void> joinRoom(String _uid, String _password, String _name) async {
     final response = await http.get(
-        'https://game-backend.glitch.me/createRoom/${_uid}/${_password}/${_name}');
+        'https://game-backend.glitch.me/joinRoom/${_uid}/${_password}/${_name}');
 
     if (response.statusCode == 200) {
-      print('Room created');
-
+      print('Joined');
       Navigator.pop(context);
       Navigator.push(
                     context,
                     new MaterialPageRoute(
                         builder: (context) => GamePlay_TugOfWar()));
+
       return 200;
-    } else if (response.statusCode == 400) {
-      return 400;
+    } else if (response.statusCode == 201) {
+      //return 400;
+      print('Wrong Password');
     } else {
-      throw Exception('Failed create room');
+      throw Exception('Failed join room');
     }
   }
 
-
-  _displayCreateDialog(BuildContext context) async {
-    final String gameID = uuid.v4();
+  _displayJoinDialog(BuildContext context) async {
+    TextEditingController _idController = TextEditingController();
     TextEditingController _passwordController = TextEditingController();
     TextEditingController _nameController = TextEditingController();
     final _formKey = GlobalKey<FormState>();
@@ -48,19 +49,17 @@ class _HostGamePopupState extends State<HostGamePopup> {
           return AlertDialog(
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0)),
-            title: Text('Do you want to host a game?'),
+            title: Text('Enter Room ID and password'),
             content: Form(
-              key: _formKey,
+              key:_formKey,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  //Text("Game ID : $gameID"),
-                 
                   TextFormField(
                     keyboardType: TextInputType.visiblePassword,
                     controller: _nameController,
                     decoration: InputDecoration(
-                        hintText: "Your Name",
+                        hintText: "Enter your name",
                         prefixIcon: Icon(Icons.account_circle)),
                     validator: (value) {
                       if (value.isEmpty) {
@@ -75,15 +74,29 @@ class _HostGamePopupState extends State<HostGamePopup> {
                   ),
                   TextFormField(
                     keyboardType: TextInputType.visiblePassword,
+                    controller: _idController,
+                    decoration: InputDecoration(
+                        hintText: "Enter Room ID",
+                        prefixIcon: Icon(Icons.confirmation_number)),
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Please enter the room ID';
+                      } 
+                      
+                      return null;
+                    },
+                  ),
+                  TextFormField(
+                    keyboardType: TextInputType.visiblePassword,
                     controller: _passwordController,
                     decoration: InputDecoration(
-                        hintText: "Enter a Password",
+                        hintText: "Enter a Pasword",
                         prefixIcon: Icon(Icons.vpn_key)),
                     validator: (value) {
                       if (value.isEmpty) {
-                        return 'You cannot leave this field empty';
+                        return 'Please enter the passsword';
                       } else if (value.length < 3) {
-                        return 'Password must be atleast 3 characters long';
+                        return 'Your name must be atleast 3 characters long';
                       } else if (value.length > 12) {
                         return 'Too long !';
                       }
@@ -102,21 +115,24 @@ class _HostGamePopupState extends State<HostGamePopup> {
               ),
               new FlatButton(
                 child: new Text(
-                  'Host',
+                  'Join',
                   style: TextStyle(color: Colors.green),
                 ),
                 onPressed: () {
                   String password = _passwordController.text == ""
                       ? "password"
                       : _passwordController.text.trim();
+                  String gameID = _idController.text == ""
+                      ? "id"
+                      : _idController.text.trim();
                   String name = _nameController.text == ""
                       ? "id"
                       : _nameController.text.trim();
                   if (_formKey.currentState.validate()) {
                     // If the form is valid, display a Snackbar.
-                    Scaffold.of(context)
-                        .showSnackBar(SnackBar(content: Text('Creating Room')));
-                    createRoom(gameID, password, name);
+                    Scaffold.of(context).showSnackBar(
+                        SnackBar(content: Text('Verifying details')));
+                    joinRoom(gameID, password, name);
                   }
 
                   //Navigator.pop(context);
@@ -127,12 +143,9 @@ class _HostGamePopupState extends State<HostGamePopup> {
         });
   }
 
-
   @override
   Widget build(BuildContext context) {
-    return 
-    
-     Card(
+    return Card(
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(25.0),
                                     ),
@@ -142,14 +155,14 @@ class _HostGamePopupState extends State<HostGamePopup> {
                                       splashColor: Colors.blue,
                                       borderRadius: BorderRadius.circular(25),
                                       onTap: () {
-                                         _displayCreateDialog(context);
+                                        _displayJoinDialog(context);
                                       },
                                       child: Container(
                                         padding: EdgeInsets.all(10),
                                         height: 50,
                                         child: Center(
                                           child: Text(
-                                            "HOST A NEW GAME",
+                                            "JOIN EXISTING GAME",
                                             style: TextStyle(
                                               color: Colors.black,
                                               fontWeight: FontWeight.w700,
@@ -163,8 +176,5 @@ class _HostGamePopupState extends State<HostGamePopup> {
     
     
     
-    
-    
-   
   }
 }

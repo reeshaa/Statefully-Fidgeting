@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:statefully_fidgeting/components/hostgamepopup.dart';
+import 'package:statefully_fidgeting/components/joingamebutton.dart';
 
 class JoinHostChoice extends StatefulWidget {
   JoinHostChoice({Key key}) : super(key: key);
@@ -11,7 +13,8 @@ class _JoinHostChoiceState extends State<JoinHostChoice> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(slivers: <Widget>[
+      body:
+          CustomScrollView(physics: BouncingScrollPhysics(), slivers: <Widget>[
         SliverAppBar(
           expandedHeight: 70,
           backgroundColor: Colors.black,
@@ -73,63 +76,9 @@ class _JoinHostChoiceState extends State<JoinHostChoice> {
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
-                                  Card(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(25.0),
-                                    ),
-                                    color: Colors.pinkAccent,
-                                    child: InkWell(
-                                      highlightColor: Colors.green,
-                                      splashColor: Colors.blue,
-                                      borderRadius: BorderRadius.circular(25),
-                                      onTap: () {
-                                        print('clicked host');
-                                      },
-                                      child: Container(
-                                        padding: EdgeInsets.all(10),
-                                        height: 50,
-                                        child: Center(
-                                          child: Text(
-                                            "HOST A NEW GAME",
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: 20,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
+                                  HostGamePopup(),
                                   SizedBox(height: 20),
-                                  Card(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(25.0),
-                                    ),
-                                    color: Colors.pinkAccent,
-                                    child: InkWell(
-                                      highlightColor: Colors.green,
-                                      splashColor: Colors.blue,
-                                      borderRadius: BorderRadius.circular(25),
-                                      onTap: () {
-                                        print('clicked join');
-                                      },
-                                      child: Container(
-                                        padding: EdgeInsets.all(10),
-                                        height: 50,
-                                        child: Center(
-                                          child: Text(
-                                            "JOIN EXISTING GAME",
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: 20,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
+                                  JoinGamePopup(),
                                 ],
                               ),
                             ],
