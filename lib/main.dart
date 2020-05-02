@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:statefully_fidgeting/screens/joinhost.dart';
 import 'package:flutter/services.dart';
 import 'package:statefully_fidgeting/components/hostgamepopup.dart';
 import 'screens/gameplay_tugofwar.dart';
@@ -30,36 +31,53 @@ class _LandingPageMainState extends State<LandingPageMain> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
+      body: Container(
+        // decoration: BoxDecoration(
+        //   gradient: LinearGradient(
+        //       begin: Alignment.topRight,
+        //       end: Alignment.bottomLeft,
+        //       colors: [Colors.pink, Colors.yellow]),
+        // ),
+        width: double.infinity,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
-            Text("This is the home screen on main.dart"),
-            RaisedButton(
-              child: Text("Open Game screen"),
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    new MaterialPageRoute(
-                        builder: (context) => GamePlay_TugOfWar()));
-              },
+            Text(
+              "Statefully Fidgeting",
+              textAlign: TextAlign.left,
+              style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
             ),
-            RaisedButton(
-              child: Text("Open Join/Host screen"),
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (BuildContext context) => JoinHostChoice()));
-              },
-            ),
-            RaisedButton(
-              child: Text("Open Join/Host screen"),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => HostGamePopup()),
-                );
-              },
+            SizedBox(height: 20),
+            Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(25.0),
+              ),
+              color: Colors.lightGreenAccent[700],
+              child: InkWell(
+                highlightColor: Colors.green,
+                splashColor: Colors.blue,
+                borderRadius: BorderRadius.circular(25),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      new MaterialPageRoute(
+                          builder: (context) => JoinHostChoice()));
+                },
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  height: 50,
+                  child: Center(
+                    child: Text(
+                      "PLAY",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             )
           ],
         ),
