@@ -1,15 +1,53 @@
 import 'package:flutter/material.dart';
 //import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'dart:async';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'dart:ffi';
 
 class GamePlay_TugOfWar extends StatefulWidget {
+  String gameId;
+  GamePlay_TugOfWar({this.gameId});
   @override
   _GamePlay_TugOfWarState createState() => _GamePlay_TugOfWarState();
 }
 
 class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar> {
+  String question='';
+  
+  Future<void> questionGetter() async {
+    final response = await http.get(
+        'https://game-backend.glitch.me/TOG/GiveQuestion');
+
+    if (response.statusCode == 200) {
+      print('Joined');
+      print(response.body);
+      setState(() {
+       question=response.body; 
+      });
+      return 200;
+    } else if (response.statusCode == 201) {
+      //return 400;
+      print('Wrong Password');
+    } else {
+      throw Exception('Failed join room');
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    questionGetter();
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
+   
     return Scaffold(
+      floatingActionButton: FloatingActionButton(onPressed: ()=>questionGetter(),),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -65,7 +103,7 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar> {
                           padding: EdgeInsets.fromLTRB(8, 10, 8, 10),
                           //color: Colors.red[400],
                           child:
-                              Center(child: Text('The question appears here')),
+                              Center(child: Text('${question}')),
                         ),
                         SizedBox(
                           height: 10,
