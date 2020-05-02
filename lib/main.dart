@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:statefully_fidgeting/components/hostgamepopup.dart';
+import 'screens/gameplay_tugofwar.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -35,7 +37,10 @@ class _LandingPageMainState extends State<LandingPageMain> {
             RaisedButton(
               child: Text("Open Game screen"),
               onPressed: () {
-                //add navigator here
+                Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (context) => GamePlay_TugOfWar()));
               },
             ),
             RaisedButton(
