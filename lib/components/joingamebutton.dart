@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:statefully_fidgeting/screens/gameplay_tugofwar.dart';
 import 'package:uuid/uuid.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -22,6 +23,10 @@ class _JoinGamePopupState extends State<JoinGamePopup> {
     if (response.statusCode == 200) {
       print('Joined');
       Navigator.pop(context);
+      Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (context) => GamePlay_TugOfWar()));
 
       return 200;
     } else if (response.statusCode == 201) {
@@ -140,13 +145,36 @@ class _JoinGamePopupState extends State<JoinGamePopup> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Column(children: <Widget>[
-      RaisedButton(
-        child: Text('mhhmmm'),
-        onPressed: () => _displayJoinDialog(context),
-      ),
-     
-    ]));
+    return Card(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(25.0),
+                                    ),
+                                    color: Colors.pinkAccent,
+                                    child: InkWell(
+                                      highlightColor: Colors.green,
+                                      splashColor: Colors.blue,
+                                      borderRadius: BorderRadius.circular(25),
+                                      onTap: () {
+                                        _displayJoinDialog(context);
+                                      },
+                                      child: Container(
+                                        padding: EdgeInsets.all(10),
+                                        height: 50,
+                                        child: Center(
+                                          child: Text(
+                                            "JOIN EXISTING GAME",
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: 20,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+    
+    
+    
   }
 }
