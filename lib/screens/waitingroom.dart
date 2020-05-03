@@ -87,16 +87,24 @@ class _WaitingRoomWidgetState extends State<WaitingroomWidget>
     super.initState();
     controller = BottomBarController(vsync: this, dragLength: 550, snap: true);
 
-    getPlayersList(widget.gameId);
+    getPlayersList(widget.gameId,teamname: 'B');
   }
 
   String question = '';
   List<String> playersList = new List();
-
+  CollectionReference teamref;
   //to get the list of players
-  Future<void> getPlayersList(String _uid) async {
+  Future<void> getPlayerData() async{
+   
+   setState(() async{
+    teamref= await Firestore.instance.collection('game1').document(widget.gameId).collection('players'); 
+   });
+    
+  }
+
+  Future<void> getPlayersList(String _uid,{String teamname=''}) async {
     final response =
-        await http.get('https://game-backend.glitch.me/playerslist/${_uid}');
+        await http.get('https://game-backend.glitch.me/playerslist${teamname}/${_uid}');
 
     if (response.statusCode == 200) {
       print('Retrieved');
