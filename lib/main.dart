@@ -90,9 +90,13 @@ class _LandingPageMainState extends State<LandingPageMain> {
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    Color dynamiciconcolor = (!isDarkMode) ? Colors.black : Colors.white;
+    Color dynamicuicolor = (!isDarkMode) ? Colors.white70 : Colors.black;
+
     return Scaffold(
       body: Container(
-        color: Colors.white70,
+        color: dynamicuicolor,
         // decoration: BoxDecoration(
         //   gradient: LinearGradient(
         //       begin: Alignment.topRight,
@@ -114,6 +118,7 @@ class _LandingPageMainState extends State<LandingPageMain> {
                     offset: Offset(5.0, 5.0),
                   ),
                 ],
+                color: dynamiciconcolor,
                 fontSize: 28,
                 fontWeight: FontWeight.w600,
                 fontFamily: 'Quicksand',
