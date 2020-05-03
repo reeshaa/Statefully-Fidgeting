@@ -9,7 +9,7 @@ class GamePlay_TugOfWar extends StatefulWidget {
   String gameId;
   bool isAdmin;
   String name;
-  GamePlay_TugOfWar({this.gameId, this.isAdmin,this.name});
+  GamePlay_TugOfWar({this.gameId, this.isAdmin, this.name});
   @override
   _GamePlay_TugOfWarState createState() => _GamePlay_TugOfWarState();
 }
@@ -36,11 +36,10 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar> {
     }
   }
 
-
 //submitting response
-Future<void> submitAnswer(String _option) async {
-    final response =
-        await http.get('https://game-backend.glitch.me/optionselect/${widget.gameId}/${widget.name}/${_option}');
+  Future<void> submitAnswer(String _option) async {
+    final response = await http.get(
+        'https://game-backend.glitch.me/optionselect/${widget.gameId}/${widget.name}/${_option}');
 
     if (response.statusCode == 200) {
       print('Joined');
@@ -56,9 +55,6 @@ Future<void> submitAnswer(String _option) async {
       throw Exception('Failed join room');
     }
   }
-
-
-
 
   //to get the list of players
   Future<void> getPlayersList(String _uid) async {
@@ -162,13 +158,18 @@ Future<void> submitAnswer(String _option) async {
                           return Container(
                               alignment: Alignment.center,
                               child: ListTile(
-                                  title: Text(
-                                playersList[index],
-                                textAlign: TextAlign.center,
-                              ),
-                              onTap: (){
-                                submitAnswer(playersList[index]);
-                              },
+                                leading: CircleAvatar(
+                                  radius: 25,
+                                  child: Image.network(
+                                      'https://robohash.org/${playersList[index]}?set=set4'),
+                                ),
+                                title: Text(
+                                  playersList[index],
+                                  textAlign: TextAlign.center,
+                                ),
+                                onTap: () {
+                                  submitAnswer(playersList[index]);
+                                },
                               ));
                         },
                         childCount: playersList.length,
