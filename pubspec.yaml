@@ -36,6 +36,7 @@ dependencies:
   fluttertoast: ^4.0.1
   audioplayers: ^0.13.2
   flutter_icons: ^1.1.0
+  flutter_shine: ^0.0.5
 
 dev_dependencies:
   flutter_test:

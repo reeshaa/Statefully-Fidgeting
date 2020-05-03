@@ -92,7 +92,7 @@ class _LandingPageMainState extends State<LandingPageMain> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Colors.white12,
+        color: Colors.white70,
         // decoration: BoxDecoration(
         //   gradient: LinearGradient(
         //       begin: Alignment.topRight,
@@ -107,17 +107,25 @@ class _LandingPageMainState extends State<LandingPageMain> {
               "Statefully Fidgeting",
               textAlign: TextAlign.left,
               style: TextStyle(
+                shadows: [
+                  Shadow(
+                    blurRadius: 8.0,
+                    color: Colors.lightGreenAccent[700],
+                    offset: Offset(5.0, 5.0),
+                  ),
+                ],
                 fontSize: 28,
                 fontWeight: FontWeight.w600,
                 fontFamily: 'Quicksand',
               ),
             ),
-            FidgetSpinner(),
-            Card(
-              shape: RoundedRectangleBorder(
+            CircleAvatar(
+              radius: 50,
+              backgroundColor: Colors.lightGreenAccent,
+              /*shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(40.0),
-              ),
-              color: Colors.lightGreenAccent[700],
+              ),*/
+              //backgroundcolor: Colors.lightGreenAccent[700],
               child: InkWell(
                 highlightColor: Colors.green,
                 splashColor: Colors.blue,
@@ -147,7 +155,8 @@ class _LandingPageMainState extends State<LandingPageMain> {
                   ),
                 ),
               ),
-            )
+            ),
+            FidgetSpinner(),
           ],
         ),
       ),
