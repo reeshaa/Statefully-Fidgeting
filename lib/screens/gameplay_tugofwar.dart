@@ -7,6 +7,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:ffi';
 
+import 'package:url_launcher/url_launcher.dart';
 import 'package:extended_navbar_scaffold/extended_navbar_scaffold.dart';
 import 'package:vsync_provider/vsync_provider.dart';
 
@@ -156,28 +157,31 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar>
                                 decoration: BoxDecoration(
                                     border: Border.all(
                                       color: Colors.lightGreenAccent[700],
-                                      width: 20,
+                                      width: 15,
                                     ),
                                     borderRadius: BorderRadius.circular(10)),
                                 //padding: EdgeInsets.fromLTRB(8, 10, 8, 10),
-                                height: 100,
+                                height: 150,
                                 width: 500,
                                 child: Container(
                                   decoration: BoxDecoration(
                                       border: Border.all(
                                         color: Colors.limeAccent[400],
-                                        width: 8,
+                                        width: 5,
                                       ),
                                       borderRadius: BorderRadius.circular(10)),
-                                  height: 100,
+                                  height: 150,
                                   width: 400,
                                   //padding: EdgeInsets.fromLTRB(8, 10, 8, 10),
                                   //color: Colors.red[400],
                                   child: Center(
                                       child: Text(
                                     '${question}',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.w800),
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w800,
+                                      fontSize: 22,
+                                    ),
                                   )),
                                 ),
                               ),
@@ -191,20 +195,46 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar>
                                   (BuildContext context, int index) {
                                     return Container(
                                         alignment: Alignment.center,
-                                        child: ListTile(
-                                          leading: CircleAvatar(
-                                            radius: 25,
-                                            child: Image.network(
-                                                'https://robohash.org/${playersList[index]}?set=set4'),
-                                          ),
-                                          title: Text(
-                                            playersList[index],
-                                            textAlign: TextAlign.center,
-                                          ),
-                                          onTap: () {
-                                            submitAnswer(playersList[index]);
-                                          },
-                                        ));
+                                        child: Container(
+                                            padding: EdgeInsets.all(10),
+                                            height: 150,
+                                            width: 300,
+                                            child: Card(
+                                              elevation: 5,
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          30)),
+                                              child: InkWell(
+                                                onTap: () {
+                                                  submitAnswer(
+                                                      playersList[index]);
+                                                },
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: <Widget>[
+                                                    CircleAvatar(
+                                                      radius: 30,
+                                                      child: Image.network(
+                                                          'https://robohash.org/${playersList[index]}?set=set4'),
+                                                    ),
+                                                    SizedBox(height: 12),
+                                                    // title:
+                                                    Text(
+                                                      playersList[index],
+                                                      style: TextStyle(
+                                                        fontSize: 26,
+                                                      ),
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            )));
                                   },
                                   childCount: playersList.length,
                                 )),
@@ -244,35 +274,87 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar>
                   child: BottomExpandableAppBar(
                     // Provide the bar controller in build method or default controller as ancestor in a tree
                     controller: controller,
-                    expandedHeight: controller.dragLength,
-                    horizontalMargin: 16,
+                    appBarHeight: 55,
+                    expandedHeight: 70,
+
+                    //expandedHeight: controller.dragLength,
+                    horizontalMargin: 0,
                     attachSide: Side.Top,
-                    expandedBackColor: Theme.of(context).backgroundColor,
+                    expandedBackColor: Colors.white,
+                    // expandedBackColor: Theme.of(context).backgroundColor,
                     // Your bottom sheet code here
                     expandedBody: Center(
-                      child: Text("Hello world!"),
+                      child: Container(
+                        padding: EdgeInsets.all(20),
+                        margin: EdgeInsets.only(top: 35),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: <Widget>[
+                            Container(
+                              width: 120,
+                              child: RaisedButton.icon(
+                                  color: Colors.black,
+                                  onPressed: () {},
+                                  icon: Icon(
+                                    Icons.backspace,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
+                                  label: Text(
+                                    "Quit Game",
+                                    style: TextStyle(color: Colors.white),
+                                  )),
+                            ),
+                            IconButton(
+                                icon: Icon(
+                                  Icons.arrow_drop_down_circle,
+                                  size: 30,
+                                ),
+                                onPressed: () {}),
+                            Container(
+                              width: 120,
+                              child: RaisedButton.icon(
+                                  color: Colors.black,
+                                  onPressed: _launchURL,
+                                  icon: Icon(
+                                    Icons.group_add,
+                                    color: Colors.white,
+                                    size: 25,
+                                  ),
+                                  label: Text(
+                                    "Invite",
+                                    style: TextStyle(color: Colors.white),
+                                  )),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                     // shape: AutomaticNotchedShape(
                     //     RoundedRectangleBorder(),
                     //     StadiumBorder(
                     //         side: BorderSide())), // Your bottom app bar code here
                     bottomAppBarBody: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(02.0),
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
                               Icon(AntDesign.Trophy),
+                              SizedBox(width: 5),
                               Text("4th")
                             ],
                           ),
+                          SizedBox(width: 5),
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
                               Icon(MaterialCommunityIcons.xbox_controller),
+                              SizedBox(width: 5),
                               Text("Round 1")
                             ],
                           ),
@@ -281,5 +363,15 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar>
                     ),
                   ),
                 ))));
+  }
+}
+
+_launchURL() async {
+  const url =
+      "https://wa.me/?text=Join%20a%20game%20of%20'TUG%20OF%20WAR'%20on%20Statefully%20Fidgeting.\n\nGAME%20ID  :%20here\nPASSWORD :%20here";
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
   }
 }
