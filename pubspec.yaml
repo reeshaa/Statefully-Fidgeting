@@ -21,12 +21,6 @@ dependencies:
   extended_navbar_scaffold: ^1.0.1
   vsync_provider: ^0.4.1
   expandable_bottom_bar: ^1.0.2
-<<<<<<< HEAD
-  
-  
-=======
-
->>>>>>> 5aab14ffb8b1a65b89653af1439dc24410f15401
   slimy_card: ^1.0.4
   flutter:
     sdk: flutter
