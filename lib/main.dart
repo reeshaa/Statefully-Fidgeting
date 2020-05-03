@@ -82,6 +82,11 @@ class LandingPageMain extends StatefulWidget {
 }
 
 class _LandingPageMainState extends State<LandingPageMain> {
+  Future<AudioPlayer> playLocalAsset() async {
+                    AudioCache cache = new AudioCache();
+                    return await cache.play("tspt_game_button_04_040.mp3");
+                  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -116,10 +121,7 @@ class _LandingPageMainState extends State<LandingPageMain> {
                 splashColor: Colors.blue,
                 borderRadius: BorderRadius.circular(25),
                 onTap: () {
-                  Future<AudioPlayer> playLocalAsset() async {
-                    AudioCache cache = new AudioCache();
-                    return await cache.play("tspt_game_button_04_040.mp3");
-                  }
+                  
 
                   playLocalAsset();
 
