@@ -5,6 +5,7 @@ import 'package:statefully_fidgeting/components/hostgamepopup.dart';
 import 'screens/gameplay_tugofwar.dart';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:statefully_fidgeting/components/fidget_spinner.dart';
 
 void main() => runApp(MyApp());
 
@@ -89,8 +90,13 @@ class _LandingPageMainState extends State<LandingPageMain> {
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    Color dynamiciconcolor = (!isDarkMode) ? Colors.black : Colors.white;
+    Color dynamicuicolor = (!isDarkMode) ? Colors.white70 : Colors.black;
+
     return Scaffold(
       body: Container(
+        color: dynamicuicolor,
         // decoration: BoxDecoration(
         //   gradient: LinearGradient(
         //       begin: Alignment.topRight,
@@ -105,17 +111,26 @@ class _LandingPageMainState extends State<LandingPageMain> {
               "Statefully Fidgeting",
               textAlign: TextAlign.left,
               style: TextStyle(
+                shadows: [
+                  Shadow(
+                    blurRadius: 8.0,
+                    color: Colors.lightGreenAccent[700],
+                    offset: Offset(5.0, 5.0),
+                  ),
+                ],
+                color: dynamiciconcolor,
                 fontSize: 28,
                 fontWeight: FontWeight.w600,
                 fontFamily: 'Quicksand',
               ),
             ),
-            SizedBox(height: 20),
-            Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25.0),
-              ),
-              color: Colors.lightGreenAccent[700],
+            CircleAvatar(
+              radius: 50,
+              backgroundColor: Colors.lightGreenAccent,
+              /*shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(40.0),
+              ),*/
+              //backgroundcolor: Colors.lightGreenAccent[700],
               child: InkWell(
                 highlightColor: Colors.green,
                 splashColor: Colors.blue,
@@ -145,7 +160,8 @@ class _LandingPageMainState extends State<LandingPageMain> {
                   ),
                 ),
               ),
-            )
+            ),
+            FidgetSpinner(),
           ],
         ),
       ),

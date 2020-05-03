@@ -20,7 +20,7 @@ class JoinGamePopup extends StatefulWidget {
 class _JoinGamePopupState extends State<JoinGamePopup> {
   Future<AudioPlayer> playLocalAsset() async {
     AudioCache cache = new AudioCache();
-    return await cache.play("zapsplat_cartoon_ascending_blip_slip_44565.mp3");
+    return await cache.play("chime_ping.mp3");
   }
 
   String gameID = '';

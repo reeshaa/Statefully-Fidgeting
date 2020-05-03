@@ -10,6 +10,8 @@ import 'dart:ffi';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:extended_navbar_scaffold/extended_navbar_scaffold.dart';
 import 'package:vsync_provider/vsync_provider.dart';
+import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class GamePlayScreen extends StatelessWidget {
   String gameId;
@@ -41,6 +43,16 @@ class GamePlay_TugOfWar extends StatefulWidget {
 
 class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar>
     with SingleTickerProviderStateMixin {
+  Future<AudioPlayer> playLocalAsset1() async {
+    AudioCache cache = new AudioCache();
+    return await cache.play("chime_hit.mp3");
+  }
+
+  Future<AudioPlayer> playLocalAsset2() async {
+    AudioCache cache = new AudioCache();
+    return await cache.play("zapsplat_cartoon_ascending_blip_slip_44565.mp3");
+  }
+
   BottomBarController controller;
 
   @override
@@ -167,10 +179,10 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar>
                                   decoration: BoxDecoration(
                                       border: Border.all(
                                         color: Colors.limeAccent[400],
-                                        width: 5,
+                                        width: 8,
                                       ),
                                       borderRadius: BorderRadius.circular(10)),
-                                  height: 150,
+                                  height: 100,
                                   width: 400,
                                   //padding: EdgeInsets.fromLTRB(8, 10, 8, 10),
                                   //color: Colors.red[400],
