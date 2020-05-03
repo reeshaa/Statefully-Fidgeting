@@ -29,6 +29,7 @@ class _HostGamePopupState extends State<HostGamePopup> {
               builder: (context) => GamePlay_TugOfWar(
                     gameId: _uid,
                     isAdmin: true,
+                    name: _name,
                   )));
       return 200;
     } else if (response.statusCode == 400) {

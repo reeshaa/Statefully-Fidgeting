@@ -5,6 +5,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:ffi';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class JoinGamePopup extends StatefulWidget {
   JoinGamePopup({Key key}) : super(key: key);
@@ -15,6 +16,16 @@ class JoinGamePopup extends StatefulWidget {
 
 class _JoinGamePopupState extends State<JoinGamePopup> {
   String gameID = '';
+  String errorMessage = '';
+
+  showtoast() => Fluttertoast.showToast(
+      msg: errorMessage,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.TOP,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.red,
+      textColor: Colors.white,
+      fontSize: 16.0);
   Future<void> joinRoom(String _uid, String _password, String _name) async {
     final response = await http.get(
         'https://game-backend.glitch.me/joinRoom/${_uid}/${_password}/${_name}');
@@ -28,13 +39,34 @@ class _JoinGamePopupState extends State<JoinGamePopup> {
               builder: (context) => GamePlay_TugOfWar(
                     gameId: _uid,
                     isAdmin: false,
+                    name: _name,
                   )));
 
       return 200;
+    } else if (response.statusCode == 300) {
+      setState(() {
+        errorMessage = "There is no ongoing game for this GameID";
+      });
+      showtoast();
+      print('Game not found');
     } else if (response.statusCode == 201) {
-      //return 400;
+      setState(() {
+        errorMessage = "Incorrect Password";
+        showtoast();
+      });
       print('Wrong Password');
+    } else if (response.statusCode == 202) {
+      setState(() {
+        errorMessage =
+            "Player with this name already exists, please use a different name or contact the host";
+        showtoast();
+      });
+      print("player with this name already exists");
     } else {
+      setState(() {
+        errorMessage = "Failed to join room";
+        showtoast();
+      });
       throw Exception('Failed join room');
     }
   }
@@ -78,7 +110,7 @@ class _JoinGamePopupState extends State<JoinGamePopup> {
                     keyboardType: TextInputType.visiblePassword,
                     controller: _idController,
                     decoration: InputDecoration(
-                        hintText: "Enter Room ID",
+                        hintText: "Paste Room ID here",
                         prefixIcon: Icon(Icons.confirmation_number)),
                     validator: (value) {
                       if (value.isEmpty) {
@@ -92,7 +124,7 @@ class _JoinGamePopupState extends State<JoinGamePopup> {
                     keyboardType: TextInputType.visiblePassword,
                     controller: _passwordController,
                     decoration: InputDecoration(
-                        hintText: "Enter a Pasword",
+                        hintText: "Enter the password",
                         prefixIcon: Icon(Icons.vpn_key)),
                     validator: (value) {
                       if (value.isEmpty) {
@@ -105,6 +137,7 @@ class _JoinGamePopupState extends State<JoinGamePopup> {
                       return null;
                     },
                   ),
+                  //Text(errorMessage),
                 ],
               ),
             ),
