@@ -4,6 +4,7 @@ import 'package:statefully_fidgeting/components/joingamebutton.dart';
 import 'package:slimy_card/slimy_card.dart';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:statefully_fidgeting/screens/credits.dart';
 
 class JoinHostChoice extends StatefulWidget {
   JoinHostChoice({Key key}) : super(key: key);
@@ -31,6 +32,16 @@ class _JoinHostChoiceState extends State<JoinHostChoice> {
     return Scaffold(
       body: CustomScrollView(slivers: <Widget>[
         SliverAppBar(
+          actions: <Widget>[
+            IconButton(
+              color: Colors.white,
+              icon: Icon(Icons.star),
+              onPressed: () {
+                Navigator.push(context,
+                    new MaterialPageRoute(builder: (context) => Credits()));
+              },
+            ),
+          ],
           expandedHeight: 70,
           backgroundColor: Colors.black,
           elevation: 5,
