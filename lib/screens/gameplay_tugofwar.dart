@@ -17,7 +17,8 @@ class GamePlayScreen extends StatelessWidget {
   String gameId;
   bool isAdmin;
   String name;
-  GamePlayScreen({this.gameId, this.isAdmin, this.name});
+  String teamname;
+  GamePlayScreen({this.gameId, this.isAdmin, this.name,this.teamname});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -26,6 +27,7 @@ class GamePlayScreen extends StatelessWidget {
           gameId: gameId,
           isAdmin: isAdmin,
           name: name,
+          teamname:teamname,
         ),
       ),
     );
@@ -36,7 +38,8 @@ class GamePlay_TugOfWar extends StatefulWidget {
   String gameId;
   bool isAdmin;
   String name;
-  GamePlay_TugOfWar({this.gameId, this.isAdmin, this.name});
+  String teamname;
+  GamePlay_TugOfWar({this.gameId, this.isAdmin, this.name,this.teamname});
   @override
   _GamePlay_TugOfWarState createState() => _GamePlay_TugOfWarState();
 }
@@ -86,6 +89,7 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar>
 
 //submitting response
   Future<void> submitAnswer(String _option) async {
+    
     final response = await http.get(
         'https://game-backend.glitch.me/optionselect/${widget.gameId}/${widget.name}/${_option}');
 
@@ -104,21 +108,22 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar>
     }
   }
 
-  //to get the list of players
-  Future<void> getPlayersList(String _uid) async {
-    final response =
-        await http.get('https://game-backend.glitch.me/playerslist/${_uid}');
+  Future<void> getPlayersList(String _uid, {String teamname = 'all'}) async {
+    final response = await http
+        .get('https://game-backend.glitch.me/playerslist${widget.teamname}/${_uid}');
 
     if (response.statusCode == 200) {
       print('Retrieved');
       var data = jsonDecode(response.body);
       List<dynamic> names = data;
       // print(data);
-
-      await setState(() {
-        this.playersList = names.map((item) => item.toString()).toList();
-      });
-      print(playersList);
+      
+        await setState(() {
+          this.playersList = names.map((item) => item.toString()).toList();
+          
+        });
+        print(this.playersList);
+      
     } else if (response.statusCode == 201) {
       print('Wrong Password');
     } else {
