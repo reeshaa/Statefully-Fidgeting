@@ -38,7 +38,7 @@ class _HostGamePopupState extends State<HostGamePopup> {
                     gameId: _uid,
                     isAdmin: true,
                     name: _name,
-                    password:_password,
+                    password: _password,
                   )));
       return 200;
     } else if (response.statusCode == 400) {
