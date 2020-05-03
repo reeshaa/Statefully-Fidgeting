@@ -6,6 +6,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:ffi';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class JoinGamePopup extends StatefulWidget {
   JoinGamePopup({Key key}) : super(key: key);
@@ -15,18 +17,22 @@ class JoinGamePopup extends StatefulWidget {
 }
 
 class _JoinGamePopupState extends State<JoinGamePopup> {
-  String gameID='';
-  String errorMessage='';
-  
-      showtoast()=>Fluttertoast.showToast(
-        msg: errorMessage,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.TOP,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0
-    );
+  Future<AudioPlayer> playLocalAsset() async {
+    AudioCache cache = new AudioCache();
+    return await cache.play("zapsplat_cartoon_ascending_blip_slip_44565.mp3");
+  }
+
+  String gameID = '';
+  String errorMessage = '';
+
+  showtoast() => Fluttertoast.showToast(
+      msg: errorMessage,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.TOP,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.red,
+      textColor: Colors.white,
+      fontSize: 16.0);
   Future<void> joinRoom(String _uid, String _password, String _name) async {
     final response = await http.get(
         'https://game-backend.glitch.me/joinRoom/${_uid}/${_password}/${_name}');
@@ -34,36 +40,39 @@ class _JoinGamePopupState extends State<JoinGamePopup> {
     if (response.statusCode == 200) {
       print('Joined');
       Navigator.pop(context);
-      Navigator.push(context,
-          new MaterialPageRoute(builder: (context) => GamePlay_TugOfWar(gameId:_uid,isAdmin: false,name: _name,)));
+      Navigator.push(
+          context,
+          new MaterialPageRoute(
+              builder: (context) => GamePlay_TugOfWar(
+                    gameId: _uid,
+                    isAdmin: false,
+                    name: _name,
+                  )));
 
       return 200;
     } else if (response.statusCode == 300) {
-       setState(() {
-       errorMessage= "There is no ongoing game for this GameID";
+      setState(() {
+        errorMessage = "There is no ongoing game for this GameID";
       });
       showtoast();
       print('Game not found');
-    }
-    
-    else if (response.statusCode == 201) {
-       setState(() {
-       errorMessage= "Incorrect Password";
-       showtoast();
+    } else if (response.statusCode == 201) {
+      setState(() {
+        errorMessage = "Incorrect Password";
+        showtoast();
       });
       print('Wrong Password');
-    }
-    else if(response.statusCode==202)
-    {
+    } else if (response.statusCode == 202) {
       setState(() {
-       errorMessage= "Player with this name already exists, please use a different name or contact the host";
-       showtoast();
+        errorMessage =
+            "Player with this name already exists, please use a different name or contact the host";
+        showtoast();
       });
       print("player with this name already exists");
     } else {
-       setState(() {
-       errorMessage= "Failed to join room";
-       showtoast();
+      setState(() {
+        errorMessage = "Failed to join room";
+        showtoast();
       });
       throw Exception('Failed join room');
     }
@@ -152,6 +161,8 @@ class _JoinGamePopupState extends State<JoinGamePopup> {
                   style: TextStyle(color: Colors.green),
                 ),
                 onPressed: () {
+                  playLocalAsset();
+
                   String password = _passwordController.text == ""
                       ? "password"
                       : _passwordController.text.trim();

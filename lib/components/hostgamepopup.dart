@@ -5,6 +5,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:ffi';
+import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class HostGamePopup extends StatefulWidget {
   HostGamePopup({Key key}) : super(key: key);
@@ -14,6 +16,11 @@ class HostGamePopup extends StatefulWidget {
 }
 
 class _HostGamePopupState extends State<HostGamePopup> {
+  Future<AudioPlayer> playLocalAsset() async {
+    AudioCache cache = new AudioCache();
+    return await cache.play("zapsplat_cartoon_ascending_blip_slip_44565.mp3");
+  }
+
   var uuid = Uuid();
   Future<int> createRoom(String _uid, String _password, String _name) async {
     final response = await http.get(
@@ -23,8 +30,14 @@ class _HostGamePopupState extends State<HostGamePopup> {
       print('Room created');
 
       Navigator.pop(context);
-      Navigator.push(context,
-          new MaterialPageRoute(builder: (context) => GamePlay_TugOfWar(gameId: _uid,isAdmin: true,name: _name,)));
+      Navigator.push(
+          context,
+          new MaterialPageRoute(
+              builder: (context) => GamePlay_TugOfWar(
+                    gameId: _uid,
+                    isAdmin: true,
+                    name: _name,
+                  )));
       return 200;
     } else if (response.statusCode == 400) {
       return 400;
@@ -103,6 +116,7 @@ class _HostGamePopupState extends State<HostGamePopup> {
                   style: TextStyle(color: Colors.green),
                 ),
                 onPressed: () {
+                  playLocalAsset();
                   String password = _passwordController.text == ""
                       ? "password"
                       : _passwordController.text.trim();

@@ -82,24 +82,11 @@ class LandingPageMain extends StatefulWidget {
 }
 
 class _LandingPageMainState extends State<LandingPageMain> {
-<<<<<<< HEAD
-  void playSound() {
-    AudioCache cache = new AudioCache();
-    cache.play("tspt_game_button_04_040.mp3");
-  }
-
   Future<AudioPlayer> playLocalAsset() async {
     AudioCache cache = new AudioCache();
     return await cache.play("tspt_game_button_04_040.mp3");
   }
 
-=======
-  Future<AudioPlayer> playLocalAsset() async {
-                    AudioCache cache = new AudioCache();
-                    return await cache.play("tspt_game_button_04_040.mp3");
-                  }
-  
->>>>>>> cc4c70c3a2fdd53b2dd50a4607e213d0f1d3bd83
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -134,19 +121,13 @@ class _LandingPageMainState extends State<LandingPageMain> {
                 splashColor: Colors.blue,
                 borderRadius: BorderRadius.circular(25),
                 onTap: () {
-<<<<<<< HEAD
-                  playSound();
-=======
-                  
-
                   playLocalAsset();
->>>>>>> cc4c70c3a2fdd53b2dd50a4607e213d0f1d3bd83
 
                   Navigator.push(
                       context,
                       new MaterialPageRoute(
                           builder: (context) => JoinHostChoice()));
-                  playLocalAsset();
+                  //playLocalAsset();
                 },
                 child: Container(
                   padding: EdgeInsets.all(10),

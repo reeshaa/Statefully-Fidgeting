@@ -49,11 +49,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - images/
-<<<<<<< HEAD
-    - sounds/tspt_game_button_04_040.mp3
-=======
     - assets/
->>>>>>> cc4c70c3a2fdd53b2dd50a4607e213d0f1d3bd83
 
   fonts:
     - family: Quicksand
