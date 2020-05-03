@@ -1,5 +1,6 @@
 import 'package:expandable_bottom_bar/expandable_bottom_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 //import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -8,6 +9,25 @@ import 'dart:ffi';
 
 import 'package:extended_navbar_scaffold/extended_navbar_scaffold.dart';
 import 'package:vsync_provider/vsync_provider.dart';
+
+class GamePlayScreen extends StatelessWidget {
+  String gameId;
+  bool isAdmin;
+  String name;
+  GamePlayScreen({this.gameId, this.isAdmin, this.name});
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: DefaultBottomBarController(
+        child: GamePlay_TugOfWar(
+          gameId: gameId,
+          isAdmin: isAdmin,
+          name: name,
+        ),
+      ),
+    );
+  }
+}
 
 class GamePlay_TugOfWar extends StatefulWidget {
   String gameId;
@@ -18,7 +38,18 @@ class GamePlay_TugOfWar extends StatefulWidget {
   _GamePlay_TugOfWarState createState() => _GamePlay_TugOfWarState();
 }
 
-class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar> {
+class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar>
+    with SingleTickerProviderStateMixin {
+  BottomBarController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = BottomBarController(vsync: this, dragLength: 550, snap: true);
+    questionGetter();
+    getPlayersList(widget.gameId);
+  }
+
   String question = '';
   List<String> playersList = new List();
   Future<void> questionGetter() async {
@@ -83,32 +114,22 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar> {
   }
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    questionGetter();
-    getPlayersList(widget.gameId);
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => getPlayersList(widget.gameId),
-        child: Icon(Icons.refresh),
-      ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-              begin: Alignment.bottomCenter,
-              end: Alignment.topCenter,
-              colors: [Colors.green[300], Colors.yellow[400]]),
-        ),
-        child: Padding(
-          padding: EdgeInsets.all(20),
-          child: Center(
-            child: Container(
-              /* decoration: BoxDecoration(
+    return MaterialApp(
+        home: DefaultBottomBarController(
+            child: Scaffold(
+                body: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                        colors: [Colors.lightGreenAccent[700], Colors.white]),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(20),
+                    child: Center(
+                      child: Container(
+                        /* decoration: BoxDecoration(
                         gradient: LinearGradient(
                             begin: Alignment.topRight,
                             end: Alignment.bottomLeft,
@@ -117,162 +138,148 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar> {
                           color: Colors.red[900],
                         ),
                         borderRadius: BorderRadius.circular(10)),*/
-              child: CustomScrollView(
-                slivers: <Widget>[
-                  SliverToBoxAdapter(
-                    child: Container(
-                      height: 150,
-                      width: 500,
-                      padding: EdgeInsets.fromLTRB(8, 10, 8, 10),
-                      //color: Colors.red[400],
-                      child: Center(
-                          child: Text('TheRope widget gets rendered here')),
-                    ),
-                  ),
-                  SliverToBoxAdapter(
-                    child: Container(
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.red[900],
-                          ),
-                          borderRadius: BorderRadius.circular(10)),
-                      padding: EdgeInsets.fromLTRB(8, 10, 8, 10),
-                      height: 100,
-                      width: 500,
-                      child: Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.yellow[900],
+                        child: CustomScrollView(
+                          slivers: <Widget>[
+                            SliverToBoxAdapter(
+                              child: Container(
+                                height: 150,
+                                width: 500,
+                                padding: EdgeInsets.fromLTRB(8, 10, 8, 10),
+                                //color: Colors.red[400],
+                                child: Center(
+                                    child: Text(
+                                        'TheRope widget gets rendered here')),
+                              ),
                             ),
-                            borderRadius: BorderRadius.circular(10)),
-                        height: 100,
-                        width: 400,
-                        padding: EdgeInsets.fromLTRB(8, 10, 8, 10),
-                        //color: Colors.red[400],
-                        child: Center(child: Text('${question}')),
+                            SliverToBoxAdapter(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Colors.lightGreenAccent[700],
+                                      width: 20,
+                                    ),
+                                    borderRadius: BorderRadius.circular(10)),
+                                //padding: EdgeInsets.fromLTRB(8, 10, 8, 10),
+                                height: 100,
+                                width: 500,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: Colors.limeAccent[400],
+                                        width: 8,
+                                      ),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  height: 100,
+                                  width: 400,
+                                  //padding: EdgeInsets.fromLTRB(8, 10, 8, 10),
+                                  //color: Colors.red[400],
+                                  child: Center(
+                                      child: Text(
+                                    '${question}',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w800),
+                                  )),
+                                ),
+                              ),
+                            ),
+                            SliverGrid(
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                ),
+                                delegate: SliverChildBuilderDelegate(
+                                  (BuildContext context, int index) {
+                                    return Container(
+                                        alignment: Alignment.center,
+                                        child: ListTile(
+                                          leading: CircleAvatar(
+                                            radius: 25,
+                                            child: Image.network(
+                                                'https://robohash.org/${playersList[index]}?set=set4'),
+                                          ),
+                                          title: Text(
+                                            playersList[index],
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          onTap: () {
+                                            submitAnswer(playersList[index]);
+                                          },
+                                        ));
+                                  },
+                                  childCount: playersList.length,
+                                )),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                  SliverGrid(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
+                ),
+                // Lets use docked FAB for handling state of sheet
+                floatingActionButtonLocation:
+                    FloatingActionButtonLocation.centerDocked,
+                extendBody: true,
+                // appBar: AppBar(
+                //   title: Text("Panel Showcase"),
+                //   backgroundColor: Theme.of(context).bottomAppBarColor,
+                // ),
+
+                // Lets use docked FAB for handling state of sheet
+                floatingActionButton: GestureDetector(
+                  // Set onVerticalDrag event to drag handlers of controller for swipe effect
+                  onVerticalDragUpdate: controller.onDrag,
+                  onVerticalDragEnd: controller.onDragEnd,
+                  child: FloatingActionButton.extended(
+                    label: Text("Pull up"),
+                    elevation: 2,
+                    backgroundColor: Colors.deepOrange,
+                    foregroundColor: Colors.white,
+
+                    //Set onPressed event to swap state of bottom bar
+                    onPressed: () => controller.swap(),
+                  ),
+                ),
+                bottomNavigationBar: PreferredSize(
+                  preferredSize: Size.fromHeight(controller.dragLength),
+                  // Size.fromHeight(controller.state.value * controller.dragLength),
+                  child: BottomExpandableAppBar(
+                    // Provide the bar controller in build method or default controller as ancestor in a tree
+                    controller: controller,
+                    expandedHeight: controller.dragLength,
+                    horizontalMargin: 16,
+                    attachSide: Side.Top,
+                    expandedBackColor: Theme.of(context).backgroundColor,
+                    // Your bottom sheet code here
+                    expandedBody: Center(
+                      child: Text("Hello world!"),
+                    ),
+                    // shape: AutomaticNotchedShape(
+                    //     RoundedRectangleBorder(),
+                    //     StadiumBorder(
+                    //         side: BorderSide())), // Your bottom app bar code here
+                    bottomAppBarBody: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Icon(AntDesign.Trophy),
+                              Text("4th")
+                            ],
+                          ),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Icon(MaterialCommunityIcons.xbox_controller),
+                              Text("Round 1")
+                            ],
+                          ),
+                        ],
                       ),
-                      delegate: SliverChildBuilderDelegate(
-                        (BuildContext context, int index) {
-                          return Container(
-                              alignment: Alignment.center,
-                              child: ListTile(
-                                leading: CircleAvatar(
-                                  radius: 25,
-                                  child: Image.network(
-                                      'https://robohash.org/${playersList[index]}?set=set4'),
-                                ),
-                                title: Text(
-                                  playersList[index],
-                                  textAlign: TextAlign.center,
-                                ),
-                                onTap: () {
-                                  submitAnswer(playersList[index]);
-                                },
-                              ));
-                        },
-                        childCount: playersList.length,
-                      )),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-      bottomNavigationBar: ExtendedNavigationBarScaffold(
-        body: Container(
-          color: Colors.deepOrange,
-        ),
-        elevation: 0,
-        floatingAppBar: true,
-        appBar: AppBar(
-          shape: kAppbarShape,
-          leading: IconButton(
-            icon: Icon(
-              Icons.person,
-              color: Colors.black,
-            ),
-            onPressed: () {},
-          ),
-          title: Text(
-            'Extended Scaffold Example',
-            style: TextStyle(color: Colors.black),
-          ),
-          centerTitle: true,
-          backgroundColor: Colors.white,
-        ),
-        navBarColor: Colors.white,
-        navBarIconColor: Colors.black,
-        moreButtons: [
-          MoreButtonModel(
-            icon: Icons.group_add,
-            label: 'Wallet',
-            onTap: () {},
-          ),
-          MoreButtonModel(
-            icon: Icons.hd,
-            label: 'My Bookings',
-            onTap: () {},
-          ),
-          MoreButtonModel(
-            icon: Icons.hdr_weak,
-            label: 'My Cars',
-            onTap: () {},
-          ),
-          MoreButtonModel(
-            icon: Icons.book,
-            label: 'Transactions',
-            onTap: () {},
-          ),
-          MoreButtonModel(
-            icon: Icons.high_quality,
-            label: 'Offer Parking',
-            onTap: () {},
-          ),
-          MoreButtonModel(
-            icon: Icons.https,
-            label: 'Profile',
-            onTap: () {},
-          ),
-          null,
-          MoreButtonModel(
-            icon: Icons.settings,
-            label: 'Settings',
-            onTap: () {},
-          ),
-          null,
-        ],
-        searchWidget: Container(
-          height: 50,
-          color: Colors.redAccent,
-        ),
-        // onTap: (button) {},
-        // currentBottomBarCenterPercent: (currentBottomBarParallexPercent) {},
-        // currentBottomBarMorePercent: (currentBottomBarMorePercent) {},
-        // currentBottomBarSearchPercent: (currentBottomBarSearchPercent) {},
-        parallexCardPageTransformer: PageTransformer(
-          pageViewBuilder: (context, visibilityResolver) {
-            return PageView.builder(
-              controller: PageController(viewportFraction: 0.85),
-              itemCount: parallaxCardItemsList.length,
-              itemBuilder: (context, index) {
-                final item = parallaxCardItemsList[index];
-                final pageVisibility =
-                    visibilityResolver.resolvePageVisibility(index);
-                return ParallaxCardsWidget(
-                  item: item,
-                  pageVisibility: pageVisibility,
-                );
-              },
-            );
-          },
-        ),
-      ),
-    );
+                    ),
+                  ),
+                ))));
   }
 }

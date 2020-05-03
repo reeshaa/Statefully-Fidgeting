@@ -126,8 +126,8 @@ class _LandingPageMainState extends State<LandingPageMain> {
                   Navigator.push(
                       context,
                       new MaterialPageRoute(
-                          builder: (context) => GamePlay_TugOfWar()));
-                  // builder: (context) => JoinHostChoice()));
+                          builder: (context) => JoinHostChoice()));
+                  //playLocalAsset();
                 },
                 child: Container(
                   padding: EdgeInsets.all(10),

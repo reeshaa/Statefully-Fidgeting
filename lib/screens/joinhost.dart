@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:statefully_fidgeting/components/hostgamepopup.dart';
 import 'package:statefully_fidgeting/components/joingamebutton.dart';
 import 'package:slimy_card/slimy_card.dart';
+import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class JoinHostChoice extends StatefulWidget {
   JoinHostChoice({Key key}) : super(key: key);
@@ -11,6 +13,11 @@ class JoinHostChoice extends StatefulWidget {
 }
 
 class _JoinHostChoiceState extends State<JoinHostChoice> {
+  Future<AudioPlayer> playLocalAsset() async {
+    AudioCache cache = new AudioCache();
+    return await cache.play("zapsplat_cartoon_ascending_blip_slip_44565.mp3");
+  }
+
   @override
   Widget build(BuildContext context) {
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
@@ -37,12 +44,14 @@ class _JoinHostChoiceState extends State<JoinHostChoice> {
           ),
           automaticallyImplyLeading: false,
           leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back_ios,
-              color: Colors.white,
-            ),
-            onPressed: () => Navigator.pop(context),
-          ),
+              icon: Icon(
+                Icons.arrow_back_ios,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                playLocalAsset();
+                Navigator.pop(context);
+              }),
         ),
         SliverFillRemaining(
           hasScrollBody: true,

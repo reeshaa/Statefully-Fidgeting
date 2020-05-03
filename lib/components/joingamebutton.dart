@@ -6,6 +6,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:ffi';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class JoinGamePopup extends StatefulWidget {
   JoinGamePopup({Key key}) : super(key: key);
@@ -15,6 +17,11 @@ class JoinGamePopup extends StatefulWidget {
 }
 
 class _JoinGamePopupState extends State<JoinGamePopup> {
+  Future<AudioPlayer> playLocalAsset() async {
+    AudioCache cache = new AudioCache();
+    return await cache.play("zapsplat_cartoon_ascending_blip_slip_44565.mp3");
+  }
+
   String gameID = '';
   String errorMessage = '';
 
@@ -37,6 +44,14 @@ class _JoinGamePopupState extends State<JoinGamePopup> {
           context,
           new MaterialPageRoute(
               builder: (context) => GamePlay_TugOfWar(
+                    gameId: _uid,
+                    isAdmin: false,
+                    name: _name,
+                  )));
+      Navigator.push(
+          context,
+          new MaterialPageRoute(
+              builder: (context) => GamePlayScreen(
                     gameId: _uid,
                     isAdmin: false,
                     name: _name,
@@ -154,6 +169,8 @@ class _JoinGamePopupState extends State<JoinGamePopup> {
                   style: TextStyle(color: Colors.green),
                 ),
                 onPressed: () {
+                  playLocalAsset();
+
                   String password = _passwordController.text == ""
                       ? "password"
                       : _passwordController.text.trim();
