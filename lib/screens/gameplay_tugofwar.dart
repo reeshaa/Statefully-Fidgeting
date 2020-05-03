@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expandable_bottom_bar/expandable_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -58,6 +59,9 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar>
 
   BottomBarController controller;
 
+  double localround=1.0;
+  bool hasAnswered=false;
+
   @override
   void initState() {
     super.initState();
@@ -93,17 +97,18 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar>
         'https://game-backend.glitch.me/optionselect/${widget.gameId}/${widget.name}/${_option}');
 
     if (response.statusCode == 200) {
-      print('Joined');
+      print('Submitted');
       print(response.body);
       setState(() {
         question = response.body;
+        hasAnswered=true;
       });
       return 200;
-    } else if (response.statusCode == 201) {
+    } else if (response.statusCode == 212) {
       //return 400;
-      print('Wrong Password');
+      print('Few players have not answered');
     } else {
-      throw Exception('Failed join room');
+      throw Exception('Answer submit failed');
     }
   }
 
@@ -133,7 +138,28 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar>
     return MaterialApp(
         home: DefaultBottomBarController(
             child: Scaffold(
-                body: Container(
+                body: StreamBuilder<DocumentSnapshot>(
+                    stream: Firestore.instance
+                        .collection('game1')
+                        .document(widget.gameId)
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) return CircularProgressIndicator();
+
+                      if (snapshot.hasData) {
+
+                        
+                        var docs =
+                            snapshot.data.data; //stpring all gamedata here
+
+                            if(docs['round']!=localround){
+                              
+                               localround= double.parse(docs['round'].toString());
+                               print(localround);
+                               hasAnswered=false; 
+                              
+                            }
+                            return Container(
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                         begin: Alignment.bottomCenter,
@@ -144,16 +170,8 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar>
                     padding: EdgeInsets.all(20),
                     child: Center(
                       child: Container(
-                        /* decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                            begin: Alignment.topRight,
-                            end: Alignment.bottomLeft,
-                            colors: [Colors.pink, Colors.red[900]]),
-                        border: Border.all(
-                          color: Colors.red[900],
-                        ),
-                        borderRadius: BorderRadius.circular(10)),*/
-                        child: CustomScrollView(
+                        
+                        child: hasAnswered?Center(child: Text("Waiting for everyone's answers"),):CustomScrollView(
                           slivers: <Widget>[
                             SliverToBoxAdapter(
                               child: Container(
@@ -190,7 +208,7 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar>
                                   //color: Colors.red[400],
                                   child: Center(
                                       child: Text(
-                                    '${question}',
+                                    '${docs['question']}',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontWeight: FontWeight.w800,
@@ -257,7 +275,7 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar>
                       ),
                     ),
                   ),
-                ),
+                );}}),
                 // Lets use docked FAB for handling state of sheet
                 floatingActionButtonLocation:
                     FloatingActionButtonLocation.centerDocked,
@@ -369,7 +387,7 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar>
                             children: <Widget>[
                               Icon(MaterialCommunityIcons.xbox_controller),
                               SizedBox(width: 5),
-                              Text("Round 1")
+                              Text("Round ${localround}")
                             ],
                           ),
                         ],
