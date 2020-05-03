@@ -12,9 +12,10 @@ We present you 'TUG OF WAR!' , by Statefully Fidgetting.
 
 It's a unique game where you can not just play with your friends, but play against them.
 You can divide your friends group into two teams and compete against each other.
+The collection of tailored questions will bring the best of your memories and bonds.
 Let's see which group knows it's members best.
 And remember!
-It's a tug of war. So the moment your opponent does better than you, you lose your points
+It's a tug of war. So the moment your opponent does better than you, you lose your points.
 
 There are two options availabe, 
 1. To Host
