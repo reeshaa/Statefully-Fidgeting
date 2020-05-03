@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:statefully_fidgeting/screens/joinhost.dart';
 import 'package:flutter/services.dart';
 import 'package:statefully_fidgeting/components/hostgamepopup.dart';
+import 'package:statefully_fidgeting/screens/result.dart';
 import 'screens/gameplay_tugofwar.dart';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
