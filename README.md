@@ -17,7 +17,7 @@ Let's see which group knows it's members best.
 And remember!
 It's a tug of war. So the moment your opponent does better than you, you lose your points.
 
-There are two options availabe, 
+There are two options available, 
 1. To Host
 2. To join
 
