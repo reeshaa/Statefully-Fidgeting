@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:statefully_fidgeting/screens/gameplay_tugofwar.dart';
+import 'package:statefully_fidgeting/screens/waitingroom.dart';
 import 'package:uuid/uuid.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -33,7 +34,7 @@ class _HostGamePopupState extends State<HostGamePopup> {
       Navigator.push(
           context,
           new MaterialPageRoute(
-              builder: (context) => GamePlay_TugOfWar(
+              builder: (context) => WaitingRoom(
                     gameId: _uid,
                     isAdmin: true,
                     name: _name,
