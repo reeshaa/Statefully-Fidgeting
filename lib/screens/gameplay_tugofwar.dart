@@ -184,32 +184,8 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar>
                                                   8, 10, 8, 10),
                                               //color: Colors.red[400],
                                               child: Center(
-                                                child: SliderTheme(
-                                                  data: SliderTheme.of(context)
-                                                      .copyWith(
-                                                    activeTrackColor:
-                                                        Colors.brown[700],
-                                                    inactiveTrackColor:
-                                                        Colors.brown[100],
-                                                    thumbColor:
-                                                        Colors.redAccent,
-                                                    thumbShape:
-                                                        RoundSliderThumbShape(
-                                                            enabledThumbRadius:
-                                                                12.0),
-                                                  ),
-                                                  child: Slider(
-                                                    value: 50,
-                                                    min: 0,
-                                                    max: 100,
-                                                    onChanged: (value) {
-                                                      setState(() {
-                                                        //_value = value;
-                                                      });
-                                                    },
-                                                  ),
-                                                ),
-                                              ),
+                                                  child: Text(
+                                                      'TheRope widget gets rendered here')),
                                             ),
                                           ),
                                           SliverToBoxAdapter(
@@ -220,6 +196,7 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar>
                                                         .lightGreenAccent[700],
                                                     width: 15,
                                                   ),
+                                                  color: Colors.white,
                                                   borderRadius:
                                                       BorderRadius.circular(
                                                           10)),
@@ -228,14 +205,13 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar>
                                               width: 500,
                                               child: Container(
                                                 decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                      color: Colors
-                                                          .limeAccent[400],
-                                                      width: 8,
-                                                    ),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10)),
+                                                  border: Border.all(
+                                                    color:
+                                                        Colors.limeAccent[400],
+                                                    width: 8,
+                                                  ),
+                                                  // borderRadius: BorderRadius.circular(10)
+                                                ),
                                                 height: 100,
                                                 width: 400,
                                                 //padding: EdgeInsets.fromLTRB(8, 10, 8, 10),
