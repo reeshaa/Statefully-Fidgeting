@@ -23,8 +23,13 @@ class _HostGamePopupState extends State<HostGamePopup> {
       print('Room created');
 
       Navigator.pop(context);
-      Navigator.push(context,
-          new MaterialPageRoute(builder: (context) => GamePlay_TugOfWar(gameId: _uid,isAdmin: true,)));
+      Navigator.push(
+          context,
+          new MaterialPageRoute(
+              builder: (context) => GamePlay_TugOfWar(
+                    gameId: _uid,
+                    isAdmin: true,
+                  )));
       return 200;
     } else if (response.statusCode == 400) {
       return 400;

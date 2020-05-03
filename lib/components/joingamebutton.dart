@@ -14,7 +14,7 @@ class JoinGamePopup extends StatefulWidget {
 }
 
 class _JoinGamePopupState extends State<JoinGamePopup> {
-  String gameID='';
+  String gameID = '';
   Future<void> joinRoom(String _uid, String _password, String _name) async {
     final response = await http.get(
         'https://game-backend.glitch.me/joinRoom/${_uid}/${_password}/${_name}');
@@ -22,8 +22,13 @@ class _JoinGamePopupState extends State<JoinGamePopup> {
     if (response.statusCode == 200) {
       print('Joined');
       Navigator.pop(context);
-      Navigator.push(context,
-          new MaterialPageRoute(builder: (context) => GamePlay_TugOfWar(gameId:_uid,isAdmin: false,)));
+      Navigator.push(
+          context,
+          new MaterialPageRoute(
+              builder: (context) => GamePlay_TugOfWar(
+                    gameId: _uid,
+                    isAdmin: false,
+                  )));
 
       return 200;
     } else if (response.statusCode == 201) {

@@ -1,3 +1,4 @@
+import 'package:expandable_bottom_bar/expandable_bottom_bar.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'dart:async';
@@ -5,9 +6,13 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:ffi';
 
+import 'package:extended_navbar_scaffold/extended_navbar_scaffold.dart';
+import 'package:vsync_provider/vsync_provider.dart';
+
 class GamePlay_TugOfWar extends StatefulWidget {
-  String gameId;bool isAdmin;
-  GamePlay_TugOfWar({this.gameId,this.isAdmin});
+  String gameId;
+  bool isAdmin;
+  GamePlay_TugOfWar({this.gameId, this.isAdmin});
   @override
   _GamePlay_TugOfWarState createState() => _GamePlay_TugOfWarState();
 }
@@ -44,9 +49,9 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => questionGetter(),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () => questionGetter(),
+      // ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -115,49 +120,95 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar> {
           ),
         ),
       ),
-      bottomSheet: BottomModal(),
-    );
-  }
-}
-
-class BottomModal extends StatefulWidget {
-  String gameId;bool isAdmin;
-  BottomModal({this.gameId,this.isAdmin});
-  @override
-  _BottomModalState createState() => _BottomModalState();
-}
-
-class _BottomModalState extends State<BottomModal> {
-  void _showModalSheet() {
-    showModalBottomSheet(
-        context: context,
-        builder: (builder) {
-          return Container(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: RaisedButton.icon(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15)),
-                  onPressed: () {},
-                  icon: Icon(Icons.group_add),
-                  label: Text("Invite Players")),
+      bottomNavigationBar: ExtendedNavigationBarScaffold(
+        body: Container(
+          color: Colors.deepOrange,
+        ),
+        elevation: 0,
+        floatingAppBar: true,
+        appBar: AppBar(
+          shape: kAppbarShape,
+          leading: IconButton(
+            icon: Icon(
+              Icons.person,
+              color: Colors.black,
             ),
-            padding: EdgeInsets.all(40.0),
-          );
-        });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        width: double.infinity,
-        child: Row(children: <Widget>[
-          RaisedButton.icon(
-              onPressed: _showModalSheet,
-              icon: Icon(
-                Icons.more_vert,
-              ),
-              label: Text("More options")),
-        ]));
+            onPressed: () {},
+          ),
+          title: Text(
+            'Extended Scaffold Example',
+            style: TextStyle(color: Colors.black),
+          ),
+          centerTitle: true,
+          backgroundColor: Colors.white,
+        ),
+        navBarColor: Colors.white,
+        navBarIconColor: Colors.black,
+        moreButtons: [
+          MoreButtonModel(
+            icon: Icons.group_add,
+            label: 'Wallet',
+            onTap: () {},
+          ),
+          MoreButtonModel(
+            icon: Icons.hd,
+            label: 'My Bookings',
+            onTap: () {},
+          ),
+          MoreButtonModel(
+            icon: Icons.hdr_weak,
+            label: 'My Cars',
+            onTap: () {},
+          ),
+          MoreButtonModel(
+            icon: Icons.book,
+            label: 'Transactions',
+            onTap: () {},
+          ),
+          MoreButtonModel(
+            icon: Icons.high_quality,
+            label: 'Offer Parking',
+            onTap: () {},
+          ),
+          MoreButtonModel(
+            icon: Icons.https,
+            label: 'Profile',
+            onTap: () {},
+          ),
+          null,
+          MoreButtonModel(
+            icon: Icons.settings,
+            label: 'Settings',
+            onTap: () {},
+          ),
+          null,
+        ],
+        searchWidget: Container(
+          height: 50,
+          color: Colors.redAccent,
+        ),
+        // onTap: (button) {},
+        // currentBottomBarCenterPercent: (currentBottomBarParallexPercent) {},
+        // currentBottomBarMorePercent: (currentBottomBarMorePercent) {},
+        // currentBottomBarSearchPercent: (currentBottomBarSearchPercent) {},
+        parallexCardPageTransformer: PageTransformer(
+          pageViewBuilder: (context, visibilityResolver) {
+            return PageView.builder(
+              controller: PageController(viewportFraction: 0.85),
+              itemCount: parallaxCardItemsList.length,
+              itemBuilder: (context, index) {
+                final item = parallaxCardItemsList[index];
+                final pageVisibility =
+                    visibilityResolver.resolvePageVisibility(index);
+                return ParallaxCardsWidget(
+                  item: item,
+                  pageVisibility: pageVisibility,
+                );
+              },
+            );
+          },
+        ),
+      ),
+    );
   }
 }

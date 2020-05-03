@@ -13,11 +13,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Statefully Fidgeting',
-      theme: ThemeData(
-      primarySwatch: Colors.grey
-    ),
-    darkTheme:
-        ThemeData(brightness: Brightness.dark, primarySwatch: Colors.deepOrange),
+      theme: ThemeData(primarySwatch: Colors.grey),
+      darkTheme: ThemeData(
+          brightness: Brightness.dark, primarySwatch: Colors.deepOrange),
       home: LandingPageMain(),
     );
   }
@@ -64,7 +62,8 @@ class _LandingPageMainState extends State<LandingPageMain> {
                   Navigator.push(
                       context,
                       new MaterialPageRoute(
-                          builder: (context) => JoinHostChoice()));
+                          builder: (context) => GamePlay_TugOfWar()));
+                  // builder: (context) => JoinHostChoice()));
                 },
                 child: Container(
                   padding: EdgeInsets.all(10),
