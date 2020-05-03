@@ -11,10 +11,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Statefully Fidgeting',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      primarySwatch: Colors.grey
+    ),
+    darkTheme:
+        ThemeData(brightness: Brightness.dark, primarySwatch: Colors.deepOrange),
       home: LandingPageMain(),
     );
   }

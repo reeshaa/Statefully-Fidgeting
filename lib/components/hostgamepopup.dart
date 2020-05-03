@@ -24,7 +24,7 @@ class _HostGamePopupState extends State<HostGamePopup> {
 
       Navigator.pop(context);
       Navigator.push(context,
-          new MaterialPageRoute(builder: (context) => GamePlay_TugOfWar()));
+          new MaterialPageRoute(builder: (context) => GamePlay_TugOfWar(gameId: _uid,isAdmin: true,name: _name,)));
       return 200;
     } else if (response.statusCode == 400) {
       return 400;
@@ -141,10 +141,11 @@ class _HostGamePopupState extends State<HostGamePopup> {
           child: Center(
             child: Text(
               "HOST A NEW GAME",
+              textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w700,
-                fontSize: 18,
+                fontSize: 17,
               ),
             ),
           ),

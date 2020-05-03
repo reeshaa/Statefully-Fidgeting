@@ -13,6 +13,13 @@ class JoinHostChoice extends StatefulWidget {
 class _JoinHostChoiceState extends State<JoinHostChoice> {
   @override
   Widget build(BuildContext context) {
+    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    Color dynamiciconcolor = (!isDarkMode) ? Colors.black : Colors.white;
+    Color dynamicuicolor =
+        (!isDarkMode) ? new Color(0xfff8faf8) : Color.fromRGBO(25, 25, 25, 1.0);
+        Color dynamicslimecolor =
+        (!isDarkMode) ? Colors.lightGreenAccent : Color.fromRGBO(25, 25, 25, 1.0);
+
     return Scaffold(
       body: CustomScrollView(slivers: <Widget>[
         SliverAppBar(
@@ -23,9 +30,11 @@ class _JoinHostChoiceState extends State<JoinHostChoice> {
           flexibleSpace: FlexibleSpaceBar(
             centerTitle: true,
             title: Text(
-              "TUG OF WAR!",
+              "TUG OF WAR!",style: TextStyle(color: Colors.white),
             ),
           ),
+          automaticallyImplyLeading: false,
+          leading: IconButton(icon:Icon(Icons.arrow_back_ios,color: Colors.white,),onPressed: ()=>Navigator.pop(context),),
         ),
         SliverFillRemaining(
           hasScrollBody: true,
@@ -45,30 +54,38 @@ class _JoinHostChoiceState extends State<JoinHostChoice> {
                     style: TextStyle(fontWeight: FontWeight.w700, fontSize: 28),
                   ),
                   SizedBox(height: 20),
-                  SlimyCard(
-                    color: Colors.lightGreenAccent[700],
-                    width: 200,
-                    topCardHeight: 150,
-                    bottomCardHeight: 150,
-                    borderRadius: 15,
-                    topCardWidget: HostGamePopup(),
-                    bottomCardWidget: JoinGamePopup(),
-                    slimeEnabled: true,
-                  ),
-                  SizedBox(height: 40),
-                  Text(
-                    "Game Description:",
-                    textAlign: TextAlign.left,
-                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
-                  ),
+                  HostGamePopup(),
                   SizedBox(height: 20),
-                  Text(
-                    "Tug of War, is a game consisting of 2 teams with a maximum of 5 members per team. Random questions are to be answered by the team members, and the team which knows its members well, wins!",
-                    textAlign: TextAlign.justify,
-                    style: TextStyle(
-                      fontSize: 22,
-                    ),
+                  JoinGamePopup(),
+                  SizedBox(height: 75),
+                  SlimyCard(
+                    color:dynamicslimecolor,
+                    //color: Colors.lightGreenAccent,
+                    width: 400,
+                    topCardHeight: 150,
+                    bottomCardHeight: 200,
+                    borderRadius: 15,
+                    topCardWidget:
+                    ListTile(title:Text(
+                    "How to Play" ,textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),),
+                    trailing: Icon(Icons.info,size: 50,color: dynamiciconcolor,),
+                     
+                    
                   ),
+                    bottomCardWidget: Text(
+                    "Tug of War, is a game consisting of 2 teams with a maximum of 5 members per team.\n\nRandom questions are to be answered by the team members, and the team which knows its members well, wins!",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 18,fontWeight: FontWeight.w300
+                    ),
+                    
+              
+                  
+                  
+                  
+                  ),
+                 slimeEnabled: true, )
                 ],
               ),
             ),
