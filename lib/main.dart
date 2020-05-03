@@ -5,6 +5,7 @@ import 'package:statefully_fidgeting/components/hostgamepopup.dart';
 import 'screens/gameplay_tugofwar.dart';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:statefully_fidgeting/components/fidget_spinner.dart';
 
 void main() => runApp(MyApp());
 
@@ -91,6 +92,7 @@ class _LandingPageMainState extends State<LandingPageMain> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        color: Colors.white12,
         // decoration: BoxDecoration(
         //   gradient: LinearGradient(
         //       begin: Alignment.topRight,
@@ -110,10 +112,10 @@ class _LandingPageMainState extends State<LandingPageMain> {
                 fontFamily: 'Quicksand',
               ),
             ),
-            SizedBox(height: 20),
+            FidgetSpinner(),
             Card(
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25.0),
+                borderRadius: BorderRadius.circular(40.0),
               ),
               color: Colors.lightGreenAccent[700],
               child: InkWell(
