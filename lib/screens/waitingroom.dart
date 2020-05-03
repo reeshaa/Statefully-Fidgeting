@@ -14,7 +14,8 @@ class WaitingRoom extends StatelessWidget {
   String gameId;
   bool isAdmin;
   String name;
-  WaitingRoom({this.gameId, this.isAdmin, this.name});
+  String password;
+  WaitingRoom({this.gameId, this.isAdmin, this.name,this.password});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -23,6 +24,7 @@ class WaitingRoom extends StatelessWidget {
           gameId: gameId,
           isAdmin: isAdmin,
           name: name,
+          password: password,
         ),
       ),
     );
@@ -35,7 +37,7 @@ class WaitingroomWidget extends StatefulWidget {
   String name;
   String password = '';
 
-  WaitingroomWidget({this.gameId, this.isAdmin, this.name});
+  WaitingroomWidget({this.gameId, this.isAdmin, this.name,this.password});
   @override
   _WaitingRoomWidgetState createState() => _WaitingRoomWidgetState();
 }
@@ -209,6 +211,17 @@ class _WaitingRoomWidgetState extends State<WaitingroomWidget>
     }
   }
 
+
+  
+_launchURL() async {
+  var url =
+      "https://wa.me/?text=Join%20a%20game%20of%20'TUG%20OF%20WAR'%20on%20Statefully%20Fidgeting.\n\nGAME%20ID:%20${widget.gameId}\nPASSWORD :%20${widget.password}";
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
+  }
+}
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -530,12 +543,3 @@ class _WaitingRoomWidgetState extends State<WaitingroomWidget>
   }
 }
 
-_launchURL() async {
-  const url =
-      "https://wa.me/?text=Join%20a%20game%20of%20'TUG%20OF%20WAR'%20on%20Statefully%20Fidgeting.\n\nGAME%20ID  :%20here\nPASSWORD :%20here";
-  if (await canLaunch(url)) {
-    await launch(url);
-  } else {
-    throw 'Could not launch $url';
-  }
-}

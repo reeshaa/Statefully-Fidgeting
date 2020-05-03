@@ -19,7 +19,8 @@ class GamePlayScreen extends StatelessWidget {
   bool isAdmin;
   String name;
   String teamname;
-  GamePlayScreen({this.gameId, this.isAdmin, this.name, this.teamname});
+  String password='';
+  GamePlayScreen({this.gameId, this.isAdmin, this.name, this.teamname,this.password});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -29,6 +30,7 @@ class GamePlayScreen extends StatelessWidget {
           isAdmin: isAdmin,
           name: name,
           teamname: teamname,
+          password:password,
         ),
       ),
     );
@@ -39,8 +41,9 @@ class GamePlay_TugOfWar extends StatefulWidget {
   String gameId;
   bool isAdmin;
   String name;
+  String password;
   String teamname;
-  GamePlay_TugOfWar({this.gameId, this.isAdmin, this.name, this.teamname});
+  GamePlay_TugOfWar({this.gameId, this.isAdmin, this.name, this.teamname,this.password});
   @override
   _GamePlay_TugOfWarState createState() => _GamePlay_TugOfWarState();
 }
@@ -132,6 +135,18 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar>
       throw Exception('Failed join room');
     }
   }
+
+
+  
+_launchURL() async {
+  var url =
+      "https://wa.me/?text=Join%20a%20game%20of%20'TUG%20OF%20WAR'%20on%20Statefully%20Fidgeting.\n\nGAME%20ID:%20${widget.gameId}\nPASSWORD :%20${widget.password}";
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
+  }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -427,12 +442,3 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar>
   }
 }
 
-_launchURL() async {
-  const url =
-      "https://wa.me/?text=Join%20a%20game%20of%20'TUG%20OF%20WAR'%20on%20Statefully%20Fidgeting.\n\nGAME%20ID  :%20here\nPASSWORD :%20here";
-  if (await canLaunch(url)) {
-    await launch(url);
-  } else {
-    throw 'Could not launch $url';
-  }
-}

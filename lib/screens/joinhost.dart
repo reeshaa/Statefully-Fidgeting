@@ -66,44 +66,48 @@ class _JoinHostChoiceState extends State<JoinHostChoice> {
         ),
         SliverFillRemaining(
           hasScrollBody: true,
-          child: Column(
-            children: <Widget>[
-              Text(
-                "Let's Play!",
-                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 28),
-              ),
-              SizedBox(height: 20),
-              HostGamePopup(),
-              SizedBox(height: 20),
-              JoinGamePopup(),
-              SizedBox(height: 75),
-              SlimyCard(
-                color: dynamicslimecolor,
-                //color: Colors.lightGreenAccent,
-                width: 400,
-                topCardHeight: 150,
-                bottomCardHeight: 200,
-                borderRadius: 15,
-                topCardWidget: ListTile(
-                  title: Text(
-                    "How to Play",
+          child: Container(
+            padding: EdgeInsets.all(20),
+            child: ListView(
+              children: <Widget>[
+                Text(
+                  "Let's Play!",
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 28),
+                ),
+                SizedBox(height: 20),
+                HostGamePopup(),
+                SizedBox(height: 20),
+                JoinGamePopup(),
+                SizedBox(height: 75),
+                SlimyCard(
+                  color: dynamicslimecolor,
+                  //color: Colors.lightGreenAccent,
+                  width: 400,
+                  topCardHeight: 150,
+                  bottomCardHeight: 200,
+                  borderRadius: 15,
+                  topCardWidget: ListTile(
+                    title: Text(
+                      "How to Play",
+                      textAlign: TextAlign.center,
+                      style:
+                          TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
+                    ),
+                    trailing: Icon(
+                      Icons.info,
+                      size: 50,
+                      color: dynamiciconcolor,
+                    ),
+                  ),
+                  bottomCardWidget: Text(
+                    "Tug of War, is a game consisting of 2 teams with a maximum of 5 members per team.\n\nRandom questions are to be answered by the team members, and the team which knows its members well, wins!",
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
                   ),
-                  trailing: Icon(
-                    Icons.info,
-                    size: 50,
-                    color: dynamiciconcolor,
-                  ),
-                ),
-                bottomCardWidget: Text(
-                  "Tug of War, is a game consisting of 2 teams with a maximum of 5 members per team.\n\nRandom questions are to be answered by the team members, and the team which knows its members well, wins!",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
-                ),
-                slimeEnabled: true,
-              )
-            ],
+                  slimeEnabled: true,
+                )
+              ],
+            ),
           ),
         ),
       ]),

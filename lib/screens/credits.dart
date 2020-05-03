@@ -44,7 +44,7 @@ class _CreditsState extends State<Credits> {
                 height: 30,
               ),
               Text(
-                'Reesha                 Soundarya\n\n\n                 Suraj',
+                'Reesha                 Soundarya\n\n\n                Suraj',
                 style: TextStyle(
                   shadows: [
                     Shadow(
