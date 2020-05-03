@@ -159,8 +159,26 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar>
                                 padding: EdgeInsets.fromLTRB(8, 10, 8, 10),
                                 //color: Colors.red[400],
                                 child: Center(
-                                    child: Text(
-                                        'TheRope widget gets rendered here')),
+                                  child: SliderTheme(
+                                    data: SliderTheme.of(context).copyWith(
+                                      activeTrackColor: Colors.brown[700],
+                                      inactiveTrackColor: Colors.brown[100],
+                                      thumbColor: Colors.redAccent,
+                                      thumbShape: RoundSliderThumbShape(
+                                          enabledThumbRadius: 12.0),
+                                    ),
+                                    child: Slider(
+                                      value: 50,
+                                      min: 0,
+                                      max: 100,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          //_value = value;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
                             SliverToBoxAdapter(
