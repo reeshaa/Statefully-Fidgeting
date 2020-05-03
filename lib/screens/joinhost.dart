@@ -55,16 +55,10 @@ class _JoinHostChoiceState extends State<JoinHostChoice> {
         ),
         SliverFillRemaining(
           hasScrollBody: true,
-          child: Container(
-            // decoration: BoxDecoration(
-            //   gradient: LinearGradient(
-            //       begin: Alignment.topRight,
-            //       end: Alignment.bottomLeft,
-            //       colors: [Colors.white10, Colors.white]),
-            // ),
+          
             child: Container(
               padding: EdgeInsets.all(20),
-              child: Column(
+              child: ListView(
                 children: <Widget>[
                   Text(
                     "Let's Play!",
@@ -106,7 +100,7 @@ class _JoinHostChoiceState extends State<JoinHostChoice> {
                 ],
               ),
             ),
-          ),
+          
         ),
       ]),
     );
