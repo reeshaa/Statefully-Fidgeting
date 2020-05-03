@@ -8,6 +8,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:statefully_fidgeting/screens/gameplay_tugofwar.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class WaitingRoom extends StatelessWidget {
   String gameId;
@@ -39,8 +40,8 @@ class WaitingroomWidget extends StatefulWidget {
   _WaitingRoomWidgetState createState() => _WaitingRoomWidgetState();
 }
 
-_displayJoinDialog(
-    BuildContext context, String _gameId, String _name, bool _isAdmin,String _teamname) async {
+_displayJoinDialog(BuildContext context, String _gameId, String _name,
+    bool _isAdmin, String _teamname) async {
   return showDialog(
       context: context,
       barrierDismissible: false,
@@ -97,13 +98,13 @@ class _WaitingRoomWidgetState extends State<WaitingroomWidget>
     getPlayersList(widget.gameId);
     getPlayersList(widget.gameId, teamname: 'B');
     getPlayersList(widget.gameId, teamname: 'A');
-    if(widget.isAdmin)
-    setState(() {
-    hasJoined =true;
-    teamname='A';
-    
-    playersList.remove(widget.name);
-    });
+    if (widget.isAdmin)
+      setState(() {
+        hasJoined = true;
+        teamname = 'A';
+
+        playersList.remove(widget.name);
+      });
   }
 
   String question = '';
@@ -195,13 +196,12 @@ class _WaitingRoomWidgetState extends State<WaitingroomWidget>
     }
   }
 
-  Future<void> _startGame()async{
+  Future<void> _startGame() async {
     final response = await http
         .get('https://game-backend.glitch.me/startgame/${widget.gameId}');
 
     if (response.statusCode == 200) {
       print('Game start');
-      
     } else if (response.statusCode == 700) {
       print('Not all players joined teams');
     } else {
@@ -241,8 +241,12 @@ class _WaitingRoomWidgetState extends State<WaitingroomWidget>
                             child: Center(
                                 child: FlatButton(
                               child: Text("TAP TO START"),
-                              onPressed: () => _displayJoinDialog(context,
-                                  widget.gameId, widget.name, widget.isAdmin,teamname),
+                              onPressed: () => _displayJoinDialog(
+                                  context,
+                                  widget.gameId,
+                                  widget.name,
+                                  widget.isAdmin,
+                                  teamname),
                             )),
                           );
                         }
@@ -432,17 +436,38 @@ class _WaitingRoomWidgetState extends State<WaitingroomWidget>
                     expandedBackColor: Theme.of(context).backgroundColor,
                     // Your bottom sheet code here
                     expandedBody: CustomScrollView(slivers: <Widget>[
-                      SliverToBoxAdapter(child: widget.isAdmin?ListTile(leading: Icon(MaterialCommunityIcons.xbox),title: Text("Start Game"),):Container(height: 0,width: 0),),
-                      
-                      SliverToBoxAdapter(child: widget.isAdmin?ListTile(leading: Icon(MaterialCommunityIcons.xbox),title: Text("Start Game",style: TextStyle(fontSize: 25),),onTap:(){
-                        _startGame();
-                      } ,):Container(height: 0,width: 0),),
-                      SliverToBoxAdapter(child: ListTile(leading: Icon(Icons.supervisor_account),title: Text("List of players who haven't joined a team"),),),
+                      SliverToBoxAdapter(
+                        child: widget.isAdmin
+                            ? ListTile(
+                                leading: Icon(MaterialCommunityIcons.xbox),
+                                title: Text("Start Game"),
+                              )
+                            : Container(height: 0, width: 0),
+                      ),
+                      SliverToBoxAdapter(
+                        child: widget.isAdmin
+                            ? ListTile(
+                                leading: Icon(MaterialCommunityIcons.xbox),
+                                title: Text(
+                                  "Start Game",
+                                  style: TextStyle(fontSize: 25),
+                                ),
+                                onTap: () {
+                                  _startGame();
+                                },
+                              )
+                            : Container(height: 0, width: 0),
+                      ),
+                      SliverToBoxAdapter(
+                        child: ListTile(
+                          leading: Icon(Icons.supervisor_account),
+                          title:
+                              Text("List of players who haven't joined a team"),
+                        ),
+                      ),
                       SliverList(
                           delegate: SliverChildBuilderDelegate(
                         (BuildContext context, int index) {
-                      
-
                           return ListTile(
                             title: Text(playersList[index]),
                           );
@@ -475,9 +500,22 @@ class _WaitingRoomWidgetState extends State<WaitingroomWidget>
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
-                              Icon(Icons.supervisor_account),
-                              Text(
-                                  '${(playersList.length + teamA.length + teamB.length)} joined')
+                              Container(
+                                width: 120,
+                                child: FlatButton.icon(
+                                    // color: Colors.black,
+                                    color: Colors.white,
+                                    onPressed: _launchURL,
+                                    icon: Icon(
+                                      Icons.group_add,
+                                      // color: Colors.white,
+                                      size: 25,
+                                    ),
+                                    label: Text(
+                                      "Invite",
+                                      // style: TextStyle(color: Colors.white),
+                                    )),
+                              ),
                             ],
                           ),
                         ],
@@ -489,5 +527,15 @@ class _WaitingRoomWidgetState extends State<WaitingroomWidget>
                 //////////NAVBAR ENDS HERE
 
                 )));
+  }
+}
+
+_launchURL() async {
+  const url =
+      "https://wa.me/?text=Join%20a%20game%20of%20'TUG%20OF%20WAR'%20on%20Statefully%20Fidgeting.\n\nGAME%20ID  :%20here\nPASSWORD :%20here";
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
   }
 }

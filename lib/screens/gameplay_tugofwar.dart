@@ -59,8 +59,8 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar>
 
   BottomBarController controller;
 
-  double localround=1.0;
-  bool hasAnswered=false;
+  double localround = 1.0;
+  bool hasAnswered = false;
 
   @override
   void initState() {
@@ -101,7 +101,7 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar>
       print(response.body);
       setState(() {
         question = response.body;
-        hasAnswered=true;
+        hasAnswered = true;
       });
       return 200;
     } else if (response.statusCode == 212) {
@@ -147,137 +147,164 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar>
                       if (!snapshot.hasData) return CircularProgressIndicator();
 
                       if (snapshot.hasData) {
-
-                        
                         var docs =
                             snapshot.data.data; //stpring all gamedata here
 
-                            if(docs['round']!=localround){
-                              
-                               localround= double.parse(docs['round'].toString());
-                               print(localround);
-                               hasAnswered=false; 
-                              
-                            }
-                            return Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        begin: Alignment.bottomCenter,
-                        end: Alignment.topCenter,
-                        colors: [Colors.lightGreenAccent[700], Colors.white]),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.all(20),
-                    child: Center(
-                      child: Container(
-                        
-                        child: hasAnswered?Center(child: Text("Waiting for everyone's answers"),):CustomScrollView(
-                          slivers: <Widget>[
-                            SliverToBoxAdapter(
+                        if (docs['round'] != localround) {
+                          localround = double.parse(docs['round'].toString());
+                          print(localround);
+                          hasAnswered = false;
+                        }
+                        return Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                                begin: Alignment.bottomCenter,
+                                end: Alignment.topCenter,
+                                colors: [
+                                  Colors.lightGreenAccent[700],
+                                  Colors.white
+                                ]),
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.all(20),
+                            child: Center(
                               child: Container(
-                                height: 150,
-                                width: 500,
-                                padding: EdgeInsets.fromLTRB(8, 10, 8, 10),
-                                //color: Colors.red[400],
-                                child: Center(
-                                    child: Text(
-                                        'TheRope widget gets rendered here')),
-                              ),
-                            ),
-                            SliverToBoxAdapter(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: Colors.lightGreenAccent[700],
-                                      width: 15,
-                                    ),
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(10)),
-                                //padding: EdgeInsets.fromLTRB(8, 10, 8, 10),
-                                height: 150,
-                                width: 500,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: Colors.limeAccent[400],
-                                      width: 8,
-                                    ),
-                                    // borderRadius: BorderRadius.circular(10)
-                                  ),
-                                  height: 100,
-                                  width: 400,
-                                  //padding: EdgeInsets.fromLTRB(8, 10, 8, 10),
-                                  //color: Colors.red[400],
-                                  child: Center(
-                                      child: Text(
-                                    '${docs['question']}',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w800,
-                                      fontSize: 22,
-                                    ),
-                                  )),
-                                ),
-                              ),
-                            ),
-                            SliverGrid(
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                ),
-                                delegate: SliverChildBuilderDelegate(
-                                  (BuildContext context, int index) {
-                                    return Container(
-                                        alignment: Alignment.center,
-                                        child: Container(
-                                            padding: EdgeInsets.all(10),
-                                            height: 150,
-                                            width: 300,
-                                            child: Card(
-                                              elevation: 5,
-                                              shape: RoundedRectangleBorder(
+                                child: hasAnswered
+                                    ? Center(
+                                        child: Text(
+                                            "Waiting for everyone's answers"),
+                                      )
+                                    : CustomScrollView(
+                                        slivers: <Widget>[
+                                          SliverToBoxAdapter(
+                                            child: Container(
+                                              height: 150,
+                                              width: 500,
+                                              padding: EdgeInsets.fromLTRB(
+                                                  8, 10, 8, 10),
+                                              //color: Colors.red[400],
+                                              child: Center(
+                                                  child: Text(
+                                                      'TheRope widget gets rendered here')),
+                                            ),
+                                          ),
+                                          SliverToBoxAdapter(
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                    color: Colors
+                                                        .lightGreenAccent[700],
+                                                    width: 15,
+                                                  ),
+                                                  color: Colors.white,
                                                   borderRadius:
                                                       BorderRadius.circular(
-                                                          30)),
-                                              child: InkWell(
-                                                onTap: () {
-                                                  submitAnswer(
-                                                      playersList[index]);
-                                                },
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: <Widget>[
-                                                    CircleAvatar(
-                                                      radius: 30,
-                                                      child: Image.network(
-                                                          'https://robohash.org/${playersList[index]}?set=set4'),
-                                                    ),
-                                                    SizedBox(height: 12),
-                                                    // title:
-                                                    Text(
-                                                      playersList[index],
-                                                      style: TextStyle(
-                                                        fontSize: 26,
-                                                      ),
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                    ),
-                                                  ],
+                                                          10)),
+                                              //padding: EdgeInsets.fromLTRB(8, 10, 8, 10),
+                                              height: 150,
+                                              width: 500,
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                    color:
+                                                        Colors.limeAccent[400],
+                                                    width: 8,
+                                                  ),
+                                                  // borderRadius: BorderRadius.circular(10)
                                                 ),
+                                                height: 100,
+                                                width: 400,
+                                                //padding: EdgeInsets.fromLTRB(8, 10, 8, 10),
+                                                //color: Colors.red[400],
+                                                child: Center(
+                                                    child: Text(
+                                                  '${docs['question']}',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w800,
+                                                    fontSize: 22,
+                                                  ),
+                                                )),
                                               ),
-                                            )));
-                                  },
-                                  childCount: playersList.length,
-                                )),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                );}}),
+                                            ),
+                                          ),
+                                          SliverGrid(
+                                              gridDelegate:
+                                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                                crossAxisCount: 2,
+                                              ),
+                                              delegate:
+                                                  SliverChildBuilderDelegate(
+                                                (BuildContext context,
+                                                    int index) {
+                                                  return Container(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: Container(
+                                                          padding:
+                                                              EdgeInsets.all(
+                                                                  10),
+                                                          height: 150,
+                                                          width: 300,
+                                                          child: Card(
+                                                            elevation: 5,
+                                                            shape: RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            30)),
+                                                            child: InkWell(
+                                                              onTap: () {
+                                                                submitAnswer(
+                                                                    playersList[
+                                                                        index]);
+                                                              },
+                                                              child: Column(
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .center,
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .center,
+                                                                children: <
+                                                                    Widget>[
+                                                                  CircleAvatar(
+                                                                    radius: 30,
+                                                                    child: Image
+                                                                        .network(
+                                                                            'https://robohash.org/${playersList[index]}?set=set4'),
+                                                                  ),
+                                                                  SizedBox(
+                                                                      height:
+                                                                          12),
+                                                                  // title:
+                                                                  Text(
+                                                                    playersList[
+                                                                        index],
+                                                                    style:
+                                                                        TextStyle(
+                                                                      fontSize:
+                                                                          26,
+                                                                    ),
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          )));
+                                                },
+                                                childCount: playersList.length,
+                                              )),
+                                        ],
+                                      ),
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+                    }),
                 // Lets use docked FAB for handling state of sheet
                 floatingActionButtonLocation:
                     FloatingActionButtonLocation.centerDocked,
