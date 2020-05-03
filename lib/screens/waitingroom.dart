@@ -40,7 +40,7 @@ class WaitingroomWidget extends StatefulWidget {
 }
 
 _displayJoinDialog(
-    BuildContext context, String _gameId, String _name, bool _isAdmin) async {
+    BuildContext context, String _gameId, String _name, bool _isAdmin,String _teamname) async {
   return showDialog(
       context: context,
       barrierDismissible: false,
@@ -71,6 +71,7 @@ _displayJoinDialog(
                               gameId: _gameId,
                               isAdmin: _isAdmin,
                               name: _name,
+                              teamname: _teamname,
                             )));
 
                 //Navigator.pop(context);
@@ -241,7 +242,7 @@ class _WaitingRoomWidgetState extends State<WaitingroomWidget>
                                 child: FlatButton(
                               child: Text("TAP TO START"),
                               onPressed: () => _displayJoinDialog(context,
-                                  widget.gameId, widget.name, widget.isAdmin),
+                                  widget.gameId, widget.name, widget.isAdmin,teamname),
                             )),
                           );
                         }
