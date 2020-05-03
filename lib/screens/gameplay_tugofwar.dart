@@ -1,9 +1,33 @@
+import 'package:expandable_bottom_bar/expandable_bottom_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 //import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:ffi';
+
+import 'package:extended_navbar_scaffold/extended_navbar_scaffold.dart';
+import 'package:vsync_provider/vsync_provider.dart';
+
+
+class GamePlayScreen extends StatelessWidget {
+  String gameId;
+  bool isAdmin;
+  String name;
+  GamePlayScreen({this.gameId, this.isAdmin, this.name});
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      
+      home: DefaultBottomBarController(
+        child: GamePlay_TugOfWar( gameId: gameId,
+                    isAdmin: isAdmin,
+                    name: name,),
+      ),
+    );
+  }
+}
 
 class GamePlay_TugOfWar extends StatefulWidget {
   String gameId;
@@ -14,7 +38,18 @@ class GamePlay_TugOfWar extends StatefulWidget {
   _GamePlay_TugOfWarState createState() => _GamePlay_TugOfWarState();
 }
 
-class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar> {
+class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar>
+    with SingleTickerProviderStateMixin {
+  BottomBarController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = BottomBarController(vsync: this, dragLength: 550, snap: true);
+    questionGetter();
+    getPlayersList(widget.gameId);
+  }
+
   String question = '';
   List<String> playersList = new List();
   Future<void> questionGetter() async {
@@ -79,20 +114,10 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar> {
   }
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    questionGetter();
-    getPlayersList(widget.gameId);
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => getPlayersList(widget.gameId),
-        child: Icon(Icons.refresh),
-      ),
+    return MaterialApp(
+        home: DefaultBottomBarController(
+            child: Scaffold(
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -186,50 +211,62 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar> {
           ),
         ),
       ),
-      bottomSheet: BottomModal(),
-    );
-  }
-}
+      // Lets use docked FAB for handling state of sheet
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      extendBody: true,
+        // appBar: AppBar(
+        //   title: Text("Panel Showcase"),
+        //   backgroundColor: Theme.of(context).bottomAppBarColor,
+        // ),
 
-class BottomModal extends StatefulWidget {
-  String gameId;
-  bool isAdmin;
-  BottomModal({this.gameId, this.isAdmin});
-  @override
-  _BottomModalState createState() => _BottomModalState();
-}
+        // Lets use docked FAB for handling state of sheet
+        floatingActionButton: GestureDetector(
+          // Set onVerticalDrag event to drag handlers of controller for swipe effect
+          onVerticalDragUpdate: controller.onDrag,
+          onVerticalDragEnd: controller.onDragEnd,
+          child: FloatingActionButton.extended(
+            label: Text("Pull up"),
+            elevation: 2,
+            backgroundColor: Colors.deepOrange,
+            foregroundColor: Colors.white,
 
-class _BottomModalState extends State<BottomModal> {
-  void _showModalSheet() {
-    showModalBottomSheet(
-        context: context,
-        builder: (builder) {
-          return Container(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: RaisedButton.icon(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15)),
-                  onPressed: () {},
-                  icon: Icon(Icons.group_add),
-                  label: Text("Invite Players")),
+            //Set onPressed event to swap state of bottom bar
+            onPressed: () => controller.swap(),
+          ),
+        ),
+     bottomNavigationBar: PreferredSize(
+          preferredSize: Size.fromHeight(controller.dragLength),
+          // Size.fromHeight(controller.state.value * controller.dragLength),
+          child: BottomExpandableAppBar(
+            // Provide the bar controller in build method or default controller as ancestor in a tree
+            controller: controller,
+            expandedHeight: controller.dragLength,
+            horizontalMargin: 16,
+            attachSide: Side.Top,
+            expandedBackColor: Theme.of(context).backgroundColor,
+            // Your bottom sheet code here
+            expandedBody: Center(
+              child: Text("Hello world!"),
             ),
-            padding: EdgeInsets.all(40.0),
-          );
-        });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        width: double.infinity,
-        child: Row(children: <Widget>[
-          RaisedButton.icon(
-              onPressed: _showModalSheet,
-              icon: Icon(
-                Icons.more_vert,
+            // shape: AutomaticNotchedShape(
+            //     RoundedRectangleBorder(),
+            //     StadiumBorder(
+            //         side: BorderSide())), // Your bottom app bar code here
+            bottomAppBarBody: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                   
+                  Row(mainAxisSize: MainAxisSize.min,children:<Widget>[Icon(AntDesign.Trophy),Text("4th")],),
+                  Row(mainAxisSize: MainAxisSize.min,children:<Widget>[Icon(MaterialCommunityIcons.xbox_controller),Text("Round 1")],),
+                    
+                  
+                ],
               ),
-              label: Text("More options")),
-        ]));
+            ),
+          ),
+        ))));
   }
 }
