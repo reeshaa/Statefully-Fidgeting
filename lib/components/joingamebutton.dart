@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:statefully_fidgeting/screens/gameplay_tugofwar.dart';
+import 'package:statefully_fidgeting/screens/waitingroom.dart';
 import 'package:uuid/uuid.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -43,13 +44,21 @@ class _JoinGamePopupState extends State<JoinGamePopup> {
       Navigator.push(
           context,
           new MaterialPageRoute(
-              builder: (context) => GamePlay_TugOfWar(
+              builder: (context) => WaitingRoom(
                     gameId: _uid,
                     isAdmin: false,
                     name: _name,
                   )));
+                 /* Navigator.push(
+          context,
+          new MaterialPageRoute(
+              builder: (context) => GamePlayScreen( gameId: _uid,
+                    isAdmin: false,
+                    name: _name,
+))
+);*/
 
-      return 200;
+     
     } else if (response.statusCode == 300) {
       setState(() {
         errorMessage = "There is no ongoing game for this GameID";
