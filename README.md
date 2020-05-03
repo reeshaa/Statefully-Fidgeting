@@ -2,7 +2,7 @@
 
 
 
-## DESCRIPTIONSuraj Kumar, [03.05.20 23:59]
+## DESCRIPTION
 Has the quarantine got you to your peaks of boredom?
 Tired of scrolling on instagram, binge watching, and ludo?
 
