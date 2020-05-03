@@ -4,6 +4,7 @@ import 'package:statefully_fidgeting/components/joingamebutton.dart';
 import 'package:slimy_card/slimy_card.dart';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:statefully_fidgeting/screens/credits.dart';
 
 class JoinHostChoice extends StatefulWidget {
   JoinHostChoice({Key key}) : super(key: key);
@@ -31,6 +32,16 @@ class _JoinHostChoiceState extends State<JoinHostChoice> {
     return Scaffold(
       body: CustomScrollView(slivers: <Widget>[
         SliverAppBar(
+          actions: <Widget>[
+            IconButton(
+              color: Colors.white,
+              icon: Icon(Icons.star),
+              onPressed: () {
+                Navigator.push(context,
+                    new MaterialPageRoute(builder: (context) => Credits()));
+              },
+            ),
+          ],
           expandedHeight: 70,
           backgroundColor: Colors.black,
           elevation: 5,
@@ -56,55 +67,46 @@ class _JoinHostChoiceState extends State<JoinHostChoice> {
         SliverFillRemaining(
           hasScrollBody: true,
           child: Container(
-            // decoration: BoxDecoration(
-            //   gradient: LinearGradient(
-            //       begin: Alignment.topRight,
-            //       end: Alignment.bottomLeft,
-            //       colors: [Colors.white10, Colors.white]),
-            // ),
-            child: Container(
-              padding: EdgeInsets.all(20),
-              child: Column(
-                children: <Widget>[
-                  Text(
-                    "Let's Play!",
-                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 28),
-                  ),
-                  SizedBox(height: 20),
-                  HostGamePopup(),
-                  SizedBox(height: 20),
-                  JoinGamePopup(),
-                  SizedBox(height: 75),
-                  SlimyCard(
-                    color: dynamicslimecolor,
-                    //color: Colors.lightGreenAccent,
-                    width: 400,
-                    topCardHeight: 150,
-                    bottomCardHeight: 200,
-                    borderRadius: 15,
-                    topCardWidget: ListTile(
-                      title: Text(
-                        "How to Play",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 28, fontWeight: FontWeight.w600),
-                      ),
-                      trailing: Icon(
-                        Icons.info,
-                        size: 50,
-                        color: dynamiciconcolor,
-                      ),
-                    ),
-                    bottomCardWidget: Text(
-                      "Tug of War, is a game consisting of 2 teams with a maximum of 5 members per team.\n\nRandom questions are to be answered by the team members, and the team which knows its members well, wins!",
+            padding: EdgeInsets.all(20),
+            child: ListView(
+              children: <Widget>[
+                Text(
+                  "Let's Play!",
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 28),
+                ),
+                SizedBox(height: 20),
+                HostGamePopup(),
+                SizedBox(height: 20),
+                JoinGamePopup(),
+                SizedBox(height: 75),
+                SlimyCard(
+                  color: dynamicslimecolor,
+                  //color: Colors.lightGreenAccent,
+                  width: 400,
+                  topCardHeight: 150,
+                  bottomCardHeight: 200,
+                  borderRadius: 15,
+                  topCardWidget: ListTile(
+                    title: Text(
+                      "How to Play",
                       textAlign: TextAlign.center,
                       style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
+                          TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
                     ),
-                    slimeEnabled: true,
-                  )
-                ],
-              ),
+                    trailing: Icon(
+                      Icons.info,
+                      size: 50,
+                      color: dynamiciconcolor,
+                    ),
+                  ),
+                  bottomCardWidget: Text(
+                    "Tug of War, is a game consisting of 2 teams with a maximum of 5 members per team.\n\nRandom questions are to be answered by the team members, and the team which knows its members well, wins!",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
+                  ),
+                  slimeEnabled: true,
+                )
+              ],
             ),
           ),
         ),
