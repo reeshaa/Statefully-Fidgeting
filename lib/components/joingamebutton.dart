@@ -52,7 +52,8 @@ class _JoinGamePopupState extends State<JoinGamePopup> {
       /* Navigator.push(
           context,
           new MaterialPageRoute(
-              builder: (context) => GamePlayScreen( gameId: _uid,
+              builder: (context) => GamePlayScreen(
+                    gameId: _uid,
                     isAdmin: false,
                     name: _name,
 ))

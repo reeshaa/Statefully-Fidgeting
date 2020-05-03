@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expandable_bottom_bar/expandable_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -7,6 +8,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:ffi';
 
+import 'package:url_launcher/url_launcher.dart';
 import 'package:extended_navbar_scaffold/extended_navbar_scaffold.dart';
 import 'package:vsync_provider/vsync_provider.dart';
 import 'package:audioplayers/audio_cache.dart';
@@ -16,7 +18,8 @@ class GamePlayScreen extends StatelessWidget {
   String gameId;
   bool isAdmin;
   String name;
-  GamePlayScreen({this.gameId, this.isAdmin, this.name});
+  String teamname;
+  GamePlayScreen({this.gameId, this.isAdmin, this.name, this.teamname});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -25,6 +28,7 @@ class GamePlayScreen extends StatelessWidget {
           gameId: gameId,
           isAdmin: isAdmin,
           name: name,
+          teamname: teamname,
         ),
       ),
     );
@@ -35,7 +39,8 @@ class GamePlay_TugOfWar extends StatefulWidget {
   String gameId;
   bool isAdmin;
   String name;
-  GamePlay_TugOfWar({this.gameId, this.isAdmin, this.name});
+  String teamname;
+  GamePlay_TugOfWar({this.gameId, this.isAdmin, this.name, this.teamname});
   @override
   _GamePlay_TugOfWarState createState() => _GamePlay_TugOfWarState();
 }
@@ -53,6 +58,9 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar>
   }
 
   BottomBarController controller;
+
+  double localround=1.0;
+  bool hasAnswered=false;
 
   @override
   void initState() {
@@ -89,24 +97,24 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar>
         'https://game-backend.glitch.me/optionselect/${widget.gameId}/${widget.name}/${_option}');
 
     if (response.statusCode == 200) {
-      print('Joined');
+      print('Submitted');
       print(response.body);
       setState(() {
         question = response.body;
+        hasAnswered=true;
       });
       return 200;
-    } else if (response.statusCode == 201) {
+    } else if (response.statusCode == 212) {
       //return 400;
-      print('Wrong Password');
+      print('Few players have not answered');
     } else {
-      throw Exception('Failed join room');
+      throw Exception('Answer submit failed');
     }
   }
 
-  //to get the list of players
-  Future<void> getPlayersList(String _uid) async {
-    final response =
-        await http.get('https://game-backend.glitch.me/playerslist/${_uid}');
+  Future<void> getPlayersList(String _uid, {String teamname = 'all'}) async {
+    final response = await http.get(
+        'https://game-backend.glitch.me/playerslist${widget.teamname}/${_uid}');
 
     if (response.statusCode == 200) {
       print('Retrieved');
@@ -117,7 +125,7 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar>
       await setState(() {
         this.playersList = names.map((item) => item.toString()).toList();
       });
-      print(playersList);
+      print(this.playersList);
     } else if (response.statusCode == 201) {
       print('Wrong Password');
     } else {
@@ -130,7 +138,28 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar>
     return MaterialApp(
         home: DefaultBottomBarController(
             child: Scaffold(
-                body: Container(
+                body: StreamBuilder<DocumentSnapshot>(
+                    stream: Firestore.instance
+                        .collection('game1')
+                        .document(widget.gameId)
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) return CircularProgressIndicator();
+
+                      if (snapshot.hasData) {
+
+                        
+                        var docs =
+                            snapshot.data.data; //stpring all gamedata here
+
+                            if(docs['round']!=localround){
+                              
+                               localround= double.parse(docs['round'].toString());
+                               print(localround);
+                               hasAnswered=false; 
+                              
+                            }
+                            return Container(
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                         begin: Alignment.bottomCenter,
@@ -141,16 +170,8 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar>
                     padding: EdgeInsets.all(20),
                     child: Center(
                       child: Container(
-                        /* decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                            begin: Alignment.topRight,
-                            end: Alignment.bottomLeft,
-                            colors: [Colors.pink, Colors.red[900]]),
-                        border: Border.all(
-                          color: Colors.red[900],
-                        ),
-                        borderRadius: BorderRadius.circular(10)),*/
-                        child: CustomScrollView(
+                        
+                        child: hasAnswered?Center(child: Text("Waiting for everyone's answers"),):CustomScrollView(
                           slivers: <Widget>[
                             SliverToBoxAdapter(
                               child: Container(
@@ -186,11 +207,11 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar>
                                 decoration: BoxDecoration(
                                     border: Border.all(
                                       color: Colors.lightGreenAccent[700],
-                                      width: 20,
+                                      width: 15,
                                     ),
                                     borderRadius: BorderRadius.circular(10)),
                                 //padding: EdgeInsets.fromLTRB(8, 10, 8, 10),
-                                height: 100,
+                                height: 150,
                                 width: 500,
                                 child: Container(
                                   decoration: BoxDecoration(
@@ -205,9 +226,12 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar>
                                   //color: Colors.red[400],
                                   child: Center(
                                       child: Text(
-                                    '${question}',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.w800),
+                                    '${docs['question']}',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w800,
+                                      fontSize: 22,
+                                    ),
                                   )),
                                 ),
                               ),
@@ -221,21 +245,46 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar>
                                   (BuildContext context, int index) {
                                     return Container(
                                         alignment: Alignment.center,
-                                        child: ListTile(
-                                          leading: CircleAvatar(
-                                            radius: 25,
-                                            child: Image.network(
-                                                'https://robohash.org/${playersList[index]}?set=set4'),
-                                          ),
-                                          title: Text(
-                                            playersList[index],
-                                            textAlign: TextAlign.center,
-                                          ),
-                                          onTap: () {
-                                            playLocalAsset1();
-                                            submitAnswer(playersList[index]);
-                                          },
-                                        ));
+                                        child: Container(
+                                            padding: EdgeInsets.all(10),
+                                            height: 150,
+                                            width: 300,
+                                            child: Card(
+                                              elevation: 5,
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          30)),
+                                              child: InkWell(
+                                                onTap: () {
+                                                  submitAnswer(
+                                                      playersList[index]);
+                                                },
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: <Widget>[
+                                                    CircleAvatar(
+                                                      radius: 30,
+                                                      child: Image.network(
+                                                          'https://robohash.org/${playersList[index]}?set=set4'),
+                                                    ),
+                                                    SizedBox(height: 12),
+                                                    // title:
+                                                    Text(
+                                                      playersList[index],
+                                                      style: TextStyle(
+                                                        fontSize: 26,
+                                                      ),
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            )));
                                   },
                                   childCount: playersList.length,
                                 )),
@@ -244,7 +293,7 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar>
                       ),
                     ),
                   ),
-                ),
+                );}}),
                 // Lets use docked FAB for handling state of sheet
                 floatingActionButtonLocation:
                     FloatingActionButtonLocation.centerDocked,
@@ -266,10 +315,7 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar>
                     foregroundColor: Colors.white,
 
                     //Set onPressed event to swap state of bottom bar
-                    onPressed: () {
-                      playLocalAsset2();
-                      controller.swap();
-                    },
+                    onPressed: () => controller.swap(),
                   ),
                 ),
                 bottomNavigationBar: PreferredSize(
@@ -278,36 +324,88 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar>
                   child: BottomExpandableAppBar(
                     // Provide the bar controller in build method or default controller as ancestor in a tree
                     controller: controller,
-                    expandedHeight: controller.dragLength,
-                    horizontalMargin: 16,
+                    appBarHeight: 55,
+                    expandedHeight: 70,
+
+                    //expandedHeight: controller.dragLength,
+                    horizontalMargin: 0,
                     attachSide: Side.Top,
-                    expandedBackColor: Theme.of(context).backgroundColor,
+                    expandedBackColor: Colors.white,
+                    // expandedBackColor: Theme.of(context).backgroundColor,
                     // Your bottom sheet code here
                     expandedBody: Center(
-                      child: Text("Hello world!"),
+                      child: Container(
+                        padding: EdgeInsets.all(20),
+                        margin: EdgeInsets.only(top: 35),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: <Widget>[
+                            Container(
+                              width: 120,
+                              child: RaisedButton.icon(
+                                  color: Colors.black,
+                                  onPressed: () {},
+                                  icon: Icon(
+                                    Icons.backspace,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
+                                  label: Text(
+                                    "Quit Game",
+                                    style: TextStyle(color: Colors.white),
+                                  )),
+                            ),
+                            IconButton(
+                                icon: Icon(
+                                  Icons.arrow_drop_down_circle,
+                                  size: 30,
+                                ),
+                                onPressed: () {}),
+                            Container(
+                              width: 120,
+                              child: RaisedButton.icon(
+                                  color: Colors.black,
+                                  onPressed: _launchURL,
+                                  icon: Icon(
+                                    Icons.group_add,
+                                    color: Colors.white,
+                                    size: 25,
+                                  ),
+                                  label: Text(
+                                    "Invite",
+                                    style: TextStyle(color: Colors.white),
+                                  )),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                     // shape: AutomaticNotchedShape(
                     //     RoundedRectangleBorder(),
                     //     StadiumBorder(
                     //         side: BorderSide())), // Your bottom app bar code here
                     bottomAppBarBody: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(02.0),
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
                               Icon(AntDesign.Trophy),
+                              SizedBox(width: 5),
                               Text("4th")
                             ],
                           ),
+                          SizedBox(width: 5),
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
                               Icon(MaterialCommunityIcons.xbox_controller),
-                              Text("Round 1")
+                              SizedBox(width: 5),
+                              Text("Round ${localround}")
                             ],
                           ),
                         ],
@@ -315,5 +413,15 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar>
                     ),
                   ),
                 ))));
+  }
+}
+
+_launchURL() async {
+  const url =
+      "https://wa.me/?text=Join%20a%20game%20of%20'TUG%20OF%20WAR'%20on%20Statefully%20Fidgeting.\n\nGAME%20ID  :%20here\nPASSWORD :%20here";
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
   }
 }
