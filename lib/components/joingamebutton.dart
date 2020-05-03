@@ -48,6 +48,13 @@ class _JoinGamePopupState extends State<JoinGamePopup> {
                     isAdmin: false,
                     name: _name,
                   )));
+                  Navigator.push(
+          context,
+          new MaterialPageRoute(
+              builder: (context) => GamePlayScreen( gameId: _uid,
+                    isAdmin: false,
+                    name: _name,
+)));
 
       return 200;
     } else if (response.statusCode == 300) {
