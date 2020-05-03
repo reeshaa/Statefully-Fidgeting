@@ -44,13 +44,18 @@ class _FidgetSpinnerState extends State<FidgetSpinner>
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    String img = (!isDarkMode)
+        ? 'images/fidget-spinner.jpg'
+        : 'images/fidget-spinner1.jpg';
+
     return Container(
       child: Transform.rotate(
         angle: animation.value,
         child: Container(
           alignment: Alignment.center,
           child: Image.asset(
-            'images/fidget-spinner.jpg',
+            img,
             height: 300,
             width: 300,
           ),
