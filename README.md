@@ -25,7 +25,7 @@ There is an option to send invite even after the game has started, enabling user
 
 We would also like to create a couple version of the same game, which would be an entertainment app for couples too.
 
-
+The first challenge being the darkmode, has been enabled in the app.
 
 Enjoy your quarantine!!
 
