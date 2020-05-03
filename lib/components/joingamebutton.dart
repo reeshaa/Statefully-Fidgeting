@@ -48,6 +48,7 @@ class _JoinGamePopupState extends State<JoinGamePopup> {
                     gameId: _uid,
                     isAdmin: false,
                     name: _name,
+                    password: _password,
                   )));
       /* Navigator.push(
           context,
