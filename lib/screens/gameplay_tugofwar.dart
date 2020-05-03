@@ -129,7 +129,8 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar> {
                     child: Container(
                       decoration: BoxDecoration(
                           border: Border.all(
-                            color: Colors.red[900],
+                            color: Colors.lightGreenAccent[700],
+                            width: 20,
                           ),
                           borderRadius: BorderRadius.circular(10)),
                       padding: EdgeInsets.fromLTRB(8, 10, 8, 10),
