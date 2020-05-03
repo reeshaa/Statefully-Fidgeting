@@ -20,7 +20,7 @@ class JoinGamePopup extends StatefulWidget {
 class _JoinGamePopupState extends State<JoinGamePopup> {
   Future<AudioPlayer> playLocalAsset() async {
     AudioCache cache = new AudioCache();
-    return await cache.play("zapsplat_cartoon_ascending_blip_slip_44565.mp3");
+    return await cache.play("chime_ping.mp3");
   }
 
   String gameID = '';
@@ -49,7 +49,7 @@ class _JoinGamePopupState extends State<JoinGamePopup> {
                     isAdmin: false,
                     name: _name,
                   )));
-                 /* Navigator.push(
+      /* Navigator.push(
           context,
           new MaterialPageRoute(
               builder: (context) => GamePlayScreen( gameId: _uid,
@@ -58,7 +58,6 @@ class _JoinGamePopupState extends State<JoinGamePopup> {
 ))
 );*/
 
-     
     } else if (response.statusCode == 300) {
       setState(() {
         errorMessage = "There is no ongoing game for this GameID";

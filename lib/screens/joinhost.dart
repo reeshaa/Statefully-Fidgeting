@@ -13,7 +13,7 @@ class JoinHostChoice extends StatefulWidget {
 }
 
 class _JoinHostChoiceState extends State<JoinHostChoice> {
-  Future<AudioPlayer> playLocalAsset() async {
+  Future<AudioPlayer> playLocalAsset1() async {
     AudioCache cache = new AudioCache();
     return await cache.play("zapsplat_cartoon_ascending_blip_slip_44565.mp3");
   }
@@ -49,7 +49,7 @@ class _JoinHostChoiceState extends State<JoinHostChoice> {
                 color: Colors.white,
               ),
               onPressed: () {
-                playLocalAsset();
+                playLocalAsset1();
                 Navigator.pop(context);
               }),
         ),

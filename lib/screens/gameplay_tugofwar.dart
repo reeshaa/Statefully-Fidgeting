@@ -9,7 +9,8 @@ import 'dart:ffi';
 
 import 'package:extended_navbar_scaffold/extended_navbar_scaffold.dart';
 import 'package:vsync_provider/vsync_provider.dart';
-
+import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class GamePlayScreen extends StatelessWidget {
   String gameId;
@@ -19,11 +20,12 @@ class GamePlayScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      
       home: DefaultBottomBarController(
-        child: GamePlay_TugOfWar( gameId: gameId,
-                    isAdmin: isAdmin,
-                    name: name,),
+        child: GamePlay_TugOfWar(
+          gameId: gameId,
+          isAdmin: isAdmin,
+          name: name,
+        ),
       ),
     );
   }
@@ -40,6 +42,16 @@ class GamePlay_TugOfWar extends StatefulWidget {
 
 class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar>
     with SingleTickerProviderStateMixin {
+  Future<AudioPlayer> playLocalAsset1() async {
+    AudioCache cache = new AudioCache();
+    return await cache.play("chime_hit.mp3");
+  }
+
+  Future<AudioPlayer> playLocalAsset2() async {
+    AudioCache cache = new AudioCache();
+    return await cache.play("zapsplat_cartoon_ascending_blip_slip_44565.mp3");
+  }
+
   BottomBarController controller;
 
   @override
@@ -118,18 +130,18 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar>
     return MaterialApp(
         home: DefaultBottomBarController(
             child: Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-              begin: Alignment.bottomCenter,
-              end: Alignment.topCenter,
-              colors: [Colors.lightGreenAccent[700], Colors.white]),
-        ),
-        child: Padding(
-          padding: EdgeInsets.all(20),
-          child: Center(
-            child: Container(
-              /* decoration: BoxDecoration(
+                body: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                        colors: [Colors.lightGreenAccent[700], Colors.white]),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(20),
+                    child: Center(
+                      child: Container(
+                        /* decoration: BoxDecoration(
                         gradient: LinearGradient(
                             begin: Alignment.topRight,
                             end: Alignment.bottomLeft,
@@ -138,135 +150,152 @@ class _GamePlay_TugOfWarState extends State<GamePlay_TugOfWar>
                           color: Colors.red[900],
                         ),
                         borderRadius: BorderRadius.circular(10)),*/
-              child: CustomScrollView(
-                slivers: <Widget>[
-                  SliverToBoxAdapter(
-                    child: Container(
-                      height: 150,
-                      width: 500,
-                      padding: EdgeInsets.fromLTRB(8, 10, 8, 10),
-                      //color: Colors.red[400],
-                      child: Center(
-                          child: Text('TheRope widget gets rendered here')),
-                    ),
-                  ),
-                  SliverToBoxAdapter(
-                    child: Container(
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.lightGreenAccent[700],
-                            width: 20,
-                          ),
-                          borderRadius: BorderRadius.circular(10)),
-                      //padding: EdgeInsets.fromLTRB(8, 10, 8, 10),
-                      height: 100,
-                      width: 500,
-                      child: Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.limeAccent[400],
-                              width: 8,
+                        child: CustomScrollView(
+                          slivers: <Widget>[
+                            SliverToBoxAdapter(
+                              child: Container(
+                                height: 150,
+                                width: 500,
+                                padding: EdgeInsets.fromLTRB(8, 10, 8, 10),
+                                //color: Colors.red[400],
+                                child: Center(
+                                    child: Text(
+                                        'TheRope widget gets rendered here')),
+                              ),
                             ),
-                            borderRadius: BorderRadius.circular(10)),
-                        height: 100,
-                        width: 400,
-                        //padding: EdgeInsets.fromLTRB(8, 10, 8, 10),
-                        //color: Colors.red[400],
-                        child: Center(
-                            child: Text(
-                          '${question}',
-                          style: TextStyle(fontWeight: FontWeight.w800),
-                        )),
+                            SliverToBoxAdapter(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Colors.lightGreenAccent[700],
+                                      width: 20,
+                                    ),
+                                    borderRadius: BorderRadius.circular(10)),
+                                //padding: EdgeInsets.fromLTRB(8, 10, 8, 10),
+                                height: 100,
+                                width: 500,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: Colors.limeAccent[400],
+                                        width: 8,
+                                      ),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  height: 100,
+                                  width: 400,
+                                  //padding: EdgeInsets.fromLTRB(8, 10, 8, 10),
+                                  //color: Colors.red[400],
+                                  child: Center(
+                                      child: Text(
+                                    '${question}',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w800),
+                                  )),
+                                ),
+                              ),
+                            ),
+                            SliverGrid(
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                ),
+                                delegate: SliverChildBuilderDelegate(
+                                  (BuildContext context, int index) {
+                                    return Container(
+                                        alignment: Alignment.center,
+                                        child: ListTile(
+                                          leading: CircleAvatar(
+                                            radius: 25,
+                                            child: Image.network(
+                                                'https://robohash.org/${playersList[index]}?set=set4'),
+                                          ),
+                                          title: Text(
+                                            playersList[index],
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          onTap: () {
+                                            playLocalAsset1();
+                                            submitAnswer(playersList[index]);
+                                          },
+                                        ));
+                                  },
+                                  childCount: playersList.length,
+                                )),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                  SliverGrid(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
+                ),
+                // Lets use docked FAB for handling state of sheet
+                floatingActionButtonLocation:
+                    FloatingActionButtonLocation.centerDocked,
+                extendBody: true,
+                // appBar: AppBar(
+                //   title: Text("Panel Showcase"),
+                //   backgroundColor: Theme.of(context).bottomAppBarColor,
+                // ),
+
+                // Lets use docked FAB for handling state of sheet
+                floatingActionButton: GestureDetector(
+                  // Set onVerticalDrag event to drag handlers of controller for swipe effect
+                  onVerticalDragUpdate: controller.onDrag,
+                  onVerticalDragEnd: controller.onDragEnd,
+                  child: FloatingActionButton.extended(
+                    label: Text("Pull up"),
+                    elevation: 2,
+                    backgroundColor: Colors.deepOrange,
+                    foregroundColor: Colors.white,
+
+                    //Set onPressed event to swap state of bottom bar
+                    onPressed: () {
+                      playLocalAsset2();
+                      controller.swap();
+                    },
+                  ),
+                ),
+                bottomNavigationBar: PreferredSize(
+                  preferredSize: Size.fromHeight(controller.dragLength),
+                  // Size.fromHeight(controller.state.value * controller.dragLength),
+                  child: BottomExpandableAppBar(
+                    // Provide the bar controller in build method or default controller as ancestor in a tree
+                    controller: controller,
+                    expandedHeight: controller.dragLength,
+                    horizontalMargin: 16,
+                    attachSide: Side.Top,
+                    expandedBackColor: Theme.of(context).backgroundColor,
+                    // Your bottom sheet code here
+                    expandedBody: Center(
+                      child: Text("Hello world!"),
+                    ),
+                    // shape: AutomaticNotchedShape(
+                    //     RoundedRectangleBorder(),
+                    //     StadiumBorder(
+                    //         side: BorderSide())), // Your bottom app bar code here
+                    bottomAppBarBody: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Icon(AntDesign.Trophy),
+                              Text("4th")
+                            ],
+                          ),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Icon(MaterialCommunityIcons.xbox_controller),
+                              Text("Round 1")
+                            ],
+                          ),
+                        ],
                       ),
-                      delegate: SliverChildBuilderDelegate(
-                        (BuildContext context, int index) {
-                          return Container(
-                              alignment: Alignment.center,
-                              child: ListTile(
-                                leading: CircleAvatar(
-                                  radius: 25,
-                                  child: Image.network(
-                                      'https://robohash.org/${playersList[index]}?set=set4'),
-                                ),
-                                title: Text(
-                                  playersList[index],
-                                  textAlign: TextAlign.center,
-                                ),
-                                onTap: () {
-                                  submitAnswer(playersList[index]);
-                                },
-                              ));
-                        },
-                        childCount: playersList.length,
-                      )),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-      // Lets use docked FAB for handling state of sheet
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      extendBody: true,
-        // appBar: AppBar(
-        //   title: Text("Panel Showcase"),
-        //   backgroundColor: Theme.of(context).bottomAppBarColor,
-        // ),
-
-        // Lets use docked FAB for handling state of sheet
-        floatingActionButton: GestureDetector(
-          // Set onVerticalDrag event to drag handlers of controller for swipe effect
-          onVerticalDragUpdate: controller.onDrag,
-          onVerticalDragEnd: controller.onDragEnd,
-          child: FloatingActionButton.extended(
-            label: Text("Pull up"),
-            elevation: 2,
-            backgroundColor: Colors.deepOrange,
-            foregroundColor: Colors.white,
-
-            //Set onPressed event to swap state of bottom bar
-            onPressed: () => controller.swap(),
-          ),
-        ),
-     bottomNavigationBar: PreferredSize(
-          preferredSize: Size.fromHeight(controller.dragLength),
-          // Size.fromHeight(controller.state.value * controller.dragLength),
-          child: BottomExpandableAppBar(
-            // Provide the bar controller in build method or default controller as ancestor in a tree
-            controller: controller,
-            expandedHeight: controller.dragLength,
-            horizontalMargin: 16,
-            attachSide: Side.Top,
-            expandedBackColor: Theme.of(context).backgroundColor,
-            // Your bottom sheet code here
-            expandedBody: Center(
-              child: Text("Hello world!"),
-            ),
-            // shape: AutomaticNotchedShape(
-            //     RoundedRectangleBorder(),
-            //     StadiumBorder(
-            //         side: BorderSide())), // Your bottom app bar code here
-            bottomAppBarBody: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                   
-                  Row(mainAxisSize: MainAxisSize.min,children:<Widget>[Icon(AntDesign.Trophy),Text("4th")],),
-                  Row(mainAxisSize: MainAxisSize.min,children:<Widget>[Icon(MaterialCommunityIcons.xbox_controller),Text("Round 1")],),
-                    
-                  
-                ],
-              ),
-            ),
-          ),
-        ))));
+                    ),
+                  ),
+                ))));
   }
 }

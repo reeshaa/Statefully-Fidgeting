@@ -18,7 +18,7 @@ class HostGamePopup extends StatefulWidget {
 class _HostGamePopupState extends State<HostGamePopup> {
   Future<AudioPlayer> playLocalAsset() async {
     AudioCache cache = new AudioCache();
-    return await cache.play("zapsplat_cartoon_ascending_blip_slip_44565.mp3");
+    return await cache.play("chime_ping.mp3");
   }
 
   var uuid = Uuid();
