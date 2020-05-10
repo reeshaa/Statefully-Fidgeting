@@ -31,13 +31,13 @@ Enjoy your quarantine!!
 
 # Tech Stack
 
-Front end on flutter
+### Front end on flutter
 
-Backend on Glitch using nodejs
+### Backend on Glitch using nodejs
 
-Database using Firebase
+### Database using Firebase Cloud Firestore
 
-# Refer miscellaneous folder for more
+### Find the backend code and game logic in the Miscellaneous folder
 
 # Video URL
 https://drive.google.com/file/d/1qCxMLlzbFmnksw9LQ67virNJZNoEnnVC/view?usp=sharing
