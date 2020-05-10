@@ -1,0 +1,468 @@
+// server.js
+// where your node app starts
+
+//express 
+const express = require("express");
+const app = express();
+
+//firestore
+const admin = require("firebase-admin");
+const serviceAccount = require(//confidential);
+
+//initialize admin SDK using serciceAcountKey
+admin.initializeApp({
+//confidential
+});
+const db = admin.firestore();
+
+// make all the files in 'public' available
+// https://expressjs.com/en/starter/static-files.html
+app.use(express.static("public"));
+
+const fetch = require("node-fetch");
+
+const ArrayList = require("arraylist");
+
+app.get("/", (request, response) => {
+  response.sendFile(__dirname + "/views/index.html");
+});
+
+// creating a room and hosting a game
+app.get("/createRoom/:id/:password/:name", async (request, response) => {
+  // express helps us take JS objects and send them as JSON
+  if (request.params.id === "" || request.params.id === undefined) {
+    //empty request
+    response.sendStatus(400);
+  } else if (
+    request.params.password === undefined ||
+    request.params.password === "" ||
+    request.params.name === undefined ||
+    request.params.name === ""
+  ) {
+    response.sendStatus(401);
+  } else {
+    let gameid = request.params.id;
+    let gamepassword = request.params.password;
+    let playername = request.params.name;
+
+    //set the password
+    await db
+      .collection("game1")
+      .doc(gameid)
+      .set({ password: gamepassword,round:0.0,isWaiting:true,})
+      .then(() => console.log("new room created"));
+
+    //add host to players
+    await db
+      .collection("game1")
+      .doc(gameid)
+      .collection("players")
+      .doc(playername)
+      .set({ isAdmin: true, name: playername ,hasAnswered:false,team:'A'})
+
+      .then(() => console.log("${playername} added"));
+    response.sendStatus(200);
+  }
+});
+
+//joining a room
+app.get("/joinRoom/:id/:password/:name", async (req, res) => {
+  // express helps us take JS objects and send them as JSON
+  if (req.params.id === undefined || req.params.id === "") {
+    //empty request
+    console.log("No ID");
+    res.sendStatus(400);
+  } else if (
+    req.params.password === undefined ||
+    req.params.password === "" ||
+    req.params.name === undefined ||
+    req.params.name === ""
+  ) {
+    console.log("No password");
+    res.sendStatus(401);
+  } else {
+    let gameid = req.params.id;
+    let gamepassword = req.params.password;
+    let playername = req.params.name;
+    const gamedoc = db.collection("game1").doc(gameid);
+
+    await gamedoc
+      .get()
+      .then(function(doc) {
+        let isNew = true;
+        if (doc.exists) {
+          console.log("Document data:", doc.data().password);
+          let dbpass = doc.data().password;
+          if (dbpass == gamepassword) {
+            console.log("verified");
+            let playerdoc = gamedoc
+              .collection("players")
+              .doc(playername);
+              
+            playerdoc
+              .set({ isAdmin: false, score: 0.0, name: playername,team: 'none',hasAnswered:false })
+
+              .then(() => console.log(playername + " added"));
+            
+           
+            res.sendStatus(200);
+          } else {
+            console.log("wrong password");
+            res.sendStatus(201);
+          }
+        } else {
+          // doc.data() will be undefined in this case
+          console.log("No such document!");
+          res.sendStatus(300);
+        }
+      })
+      .catch(function(error) {
+        console.log("Error getting document:", error);
+      });
+  }
+});
+
+//getting a question
+app.get("/TOG/GiveQuestion", async (req, res) => {
+  const url =
+    "https://spreadsheets.google.com/feeds/cells/1hSm6SrEmMrCDn-v0_M4SOByogmDNj_F34KU7y1WeV6Y/1/public/full?alt=json";
+  var qslist = new ArrayList();
+  const get_data = async url => {
+    try {
+      const response = await fetch(url);
+      const json = await response.json();
+
+      await json["feed"]["entry"].map(val => {
+        //console.log(val["content"]["$t"]);
+        qslist.add(val["content"]["$t"]);
+      });
+      let randomqs = qslist.sample();
+      console.log(randomqs);
+      res.send(randomqs);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  get_data(url);
+});
+
+//player leaves
+app.get("/playerleaves/:id/:name", async (req, res) => {
+  if (
+    req.params.id === undefined ||
+    req.params.id === "" ||
+    req.params.name === undefined ||
+    req.params.name === ""
+  ) {
+    //empty request
+    console.log("No ID/Name");
+    res.sendStatus(400);
+  } else {
+    let gameid = req.params.id;
+    const gamedoc = db.collection("game1").doc(gameid);
+    let name = req.params.name;
+    await gamedoc
+      .collection("players")
+      .doc(name)
+      .delete();
+    console.log(name + " is deleted");
+    res.sendStatus(200);
+  }
+});
+
+//get player list - BOTH TEAMS
+app.get("/playerslistall/:id", async (req, res) => {
+  if (req.params.id === undefined || req.params.id === "") {
+    //empty request
+    console.log("No ID");
+    res.sendStatus(400);
+  } else {
+    var playerslist = new ArrayList();
+    let gameid = req.params.id;
+    const gamedoc = db
+      .collection("game1")
+      .doc(gameid)
+      .collection("players");
+    await gamedoc
+      .get()
+      .then(snapshot => {
+        snapshot.forEach(doc => {
+          console.log(doc.id, "=>", doc.data().name);
+          playerslist.add(doc.data().name);
+        });
+      })
+      .catch(err => {
+        console.log("Error getting documents", err);
+      });
+
+    console.log(playerslist);
+    res.send(playerslist);
+    //    res.sendStatus(200);
+  }
+});
+
+//get player list TEAM B
+app.get("/playerslistA/:id", async (req, res) => {
+  if (req.params.id === undefined || req.params.id === "") {
+    //empty request
+    console.log("No ID");
+    res.sendStatus(400);
+  } else {
+    var playerslist = new ArrayList();
+    let gameid = req.params.id;
+    const gamedoc = db
+      .collection("game1")
+      .doc(gameid)
+      .collection("players").where('team','==','A');
+    await gamedoc
+      .get()
+      .then(snapshot => {
+        snapshot.forEach(doc => {
+          console.log(doc.id, "=>", doc.data().name);
+          playerslist.add(doc.data().name);
+        });
+    console.log(playerslist);
+    res.send(playerslist);  
+    })
+      .catch(err => {
+        console.log("Error getting documents", err);
+      });
+
+    
+    //    res.sendStatus(200);
+  }
+});
+
+
+
+//get player list TEAM B
+app.get("/playerslistB/:id", async (req, res) => {
+  if (req.params.id === undefined || req.params.id === "") {
+    //empty request
+    console.log("No ID");
+    res.sendStatus(400);
+  } else {
+    var playerslist = new ArrayList();
+    let gameid = req.params.id;
+    const gamedoc = db
+      .collection("game1")
+      .doc(gameid)
+      .collection("players").where('team','==','B');
+    await gamedoc
+      .get()
+      .then(snapshot => {
+        snapshot.forEach(doc => {
+          console.log(doc.id, "=>", doc.data().name);
+          playerslist.add(doc.data().name);
+        });
+      })
+      .catch(err => {
+        console.log("Error getting documents", err);
+      });
+
+    console.log(playerslist);
+    res.send(playerslist);
+    // .
+    res.sendStatus(200);
+  }
+});
+
+//joinTeam
+app.get("/jointeam/:id/:teamname/:name", async (req, res) => {
+  if (
+    req.params.teamname === undefined ||
+    req.params.teamname === "" ||
+    req.params.name === undefined ||
+    req.params.name === ""
+     ||
+    req.params.id=== undefined ||
+    req.params.id === ""
+  ) {
+    //empty request
+    console.log("No ID/Name");
+    res.sendStatus(400);
+  }
+  else{
+    let team=req.params.teamname;
+    let playername=req.params.name;
+    let gameid=req.params.id;
+    await db.collection('game1').doc(gameid).collection('players').doc(playername).update({team:team});
+    console.log(playername,'added to team',team);
+    res.sendStatus(200);
+  }
+  
+  
+  
+})
+
+
+//leaveTeam
+app.get("/leaveteam/:id/:teamname/:name", async (req, res) => {
+  if (
+    req.params.teamname === undefined ||
+    req.params.teamname === "" ||
+    req.params.name === undefined ||
+    req.params.name === ""
+     ||
+    req.params.id=== undefined ||
+    req.params.id === ""
+  ) {
+    //empty request
+    console.log("No ID/Name");
+    res.sendStatus(400);
+  }
+  else{
+    let team=req.params.teamname;
+    let playername=req.params.name;
+    let gameid=req.params.id;
+    await db.collection('game1').doc(gameid).collection('players').doc(playername).update({team:'none'});
+    console.log(playername,'added to team',team);
+    res.sendStatus(200);
+  }
+  
+  
+  
+})
+
+
+//startgame
+
+app.get('/startgame/:id',async (req,res)=>{
+  await db.collection('game1').doc(req.params.id).collection('players').where('team','==','none').get().then(snapshot => {
+    if (snapshot.empty) {
+      console.log('All players have joined teams');
+      
+      const url =
+    "https://spreadsheets.google.com/feeds/cells/1hSm6SrEmMrCDn-v0_M4SOByogmDNj_F34KU7y1WeV6Y/1/public/full?alt=json";
+  var qslist = new ArrayList();
+  const get_data = async url => {
+    try {
+      const response = await fetch(url);
+      const json = await response.json();
+
+      await json["feed"]["entry"].map(val => {
+        //console.log(val["content"]["$t"]);
+        qslist.add(val["content"]["$t"]);
+      });
+      let randomqs = qslist.sample();
+      
+      console.log(randomqs);
+     await  db.collection('game1').doc(req.params.id).update({question:randomqs,round:1.0,isWaiting:false});
+      
+      
+      
+      
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  get_data(url);
+      
+      
+      
+      
+      
+      res.sendStatus(200);
+      
+    } 
+    else{
+
+    
+    res.sendStatus(700);}
+  })
+  .catch(err => {
+    console.log('Error getting documents', err);
+  });
+})
+
+
+//roundadvance
+
+//onOptionSelection
+app.get("/optionselect/:id/:name/:option",async(req,res)=>{
+  if (
+    req.params.id === undefined ||
+    req.params.id === "" ||
+    req.params.name === undefined ||
+    req.params.name === ""||
+    req.params.option === undefined ||
+    req.params.option === ""
+  ) {
+    //empty request
+    console.log("No ID/Name");
+    res.sendStatus(400);
+  } 
+  else{
+    let gameid = req.params.id;
+    let option = req.params.option;
+    let playername = req.params.name;
+    const playerdoc =await db.collection("game1").doc(gameid).collection('players').doc(playername);
+    const optiondoc =await db.collection("game1").doc(gameid).collection('players').doc(option);
+        let scoreprev=await optiondoc.get().then(snapshot=>snapshot.data()['score']);
+    scoreprev++;
+    await optiondoc.update({score:scoreprev});
+    console.log(option , " score ", scoreprev);
+    
+    await playerdoc.update({answer:option,hasAnswered:true}).then(()=>console.log(playername+" marked "+option));
+    
+    let highscore=0;
+   await db.collection('game1').doc(gameid).collection('players').where('hasAnswered','==',false).get().then(snapshot => {
+    if (snapshot.empty) {
+      console.log('All players have answered');
+      let a= db.collection('game1').doc(gameid).collection('players').orderBy('score').limit(1).get().then(async (snapshot1)=>snapshot1.forEach(doc => 
+      highscore= doc.data()['score']));
+    
+      
+      const url =
+    "https://spreadsheets.google.com/feeds/cells/1hSm6SrEmMrCDn-v0_M4SOByogmDNj_F34KU7y1WeV6Y/1/public/full?alt=json";
+  var qslist = new ArrayList();
+  const get_data = async url => {
+    try {
+      const response = await fetch(url);
+      const json = await response.json();
+
+      await json["feed"]["entry"].map(val => {
+        //console.log(val["content"]["$t"]);
+        qslist.add(val["content"]["$t"]);
+      });
+      let randomqs = qslist.sample();
+      let roundnoprev=await db.collection('game1').doc(gameid).get().then(snapshot=>snapshot.data()['round']);
+      console.log(roundnoprev);
+      roundnoprev++;
+      
+      console.log(randomqs);
+      await db.collection('game1').doc(gameid).update({question:randomqs,round:roundnoprev});
+      res.sendStatus(200);
+      
+      
+      
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  get_data(url);
+      
+      
+      return;
+    } 
+     
+     //if all haven't answered
+    res.sendStatus(212);
+    })
+
+  .catch(err => {
+    console.log('Error getting documents', err);
+  });
+
+    
+  }
+  
+});
+
+// listen for requests :)
+const listener = app.listen(process.env.PORT, () => {
+  console.log("Your app is listening on port " + listener.address().port);
+});
